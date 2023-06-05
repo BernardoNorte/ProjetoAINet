@@ -9,6 +9,7 @@
             @endif
             @if ($showDetail)
                 <th class="button-icon-col"></th>
+            @endif
             
         </tr>
     </thead>

@@ -67,9 +67,6 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li>
-                            <a class="dropdown-item" class="nav-link {{ Route::currentRouteName() == 'clientes.show' ? 'active' : '' }}" href="{{ route('clientes.show') }}">Perfil</a>
-                        </li>
                         <li><a class="dropdown-item" href="#">Alterar Senha</a></li>
                         <li>
                             <hr class="dropdown-divider" />
@@ -87,19 +84,20 @@
                     </ul>
                 </li>
             </ul>
-        @endguest
-        <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
-                    </form>
-                    <button class="btn btn-link btn-sm order-1 order-lg-0 me-3 me-lg-0" id="sidebarToggle" href="#"><i
+            <form class="d-flex">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                </button>
+            </form>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-3 me-lg-0" id="sidebarToggle" href="#"><i
                 class="fas fa-bars"></i></button>
                 </div>
             </div>
+        @endguest
         </nav>
+        
         <!-- Footer-->
         <div id="layoutSidenav_content">
             <main>
