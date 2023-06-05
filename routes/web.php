@@ -32,3 +32,7 @@ Route::view('/', 'home')->name('root');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('clientes', ClienteController::class);
+
+Route::resource('catalogo', CatalogoController::class);
+
+//Route::view('/', 'catalogo')->name('catalogo');
