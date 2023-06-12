@@ -19,6 +19,13 @@
             </li>
         </ul>
     </nav>
+    <nav>
+        <ul>
+            <li>
+                <a href="{{ route('clientes.index') }}">Clients</a>
+            </li>
+        </ul>
+    </nav>
     <div class="main">
         <header>
             <h1>@yield('header-title')</h1>

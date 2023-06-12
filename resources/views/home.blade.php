@@ -16,6 +16,9 @@
                         <p>Login 
                             <a href="{{ route('login') }}">Here</a>
                         </p>
+                        <p>Register 
+                            <a href="{{ route('register') }}">Here</a>
+                        </p>
                     @endauth    
                 </div>
             </div>
