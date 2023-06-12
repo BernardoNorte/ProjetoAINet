@@ -52,8 +52,11 @@ class ClienteController extends Controller
         $cliente->user->save();
 
         $cliente->save();
+        $url = route('clientes.show', ['cliente' => $cliente]);
+        $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
+                        <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
         return redirect()->route('clientes.index')
-            ->with('alert-msg', 'cliente "' . $cliente->user->name . '" foi alterado com sucesso!')
+            ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
     }
 
