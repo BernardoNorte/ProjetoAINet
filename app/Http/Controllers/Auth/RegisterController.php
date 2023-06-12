@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -54,7 +55,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'nif' => ['required', 'integer', 'min:9', 'max:9'],
+            'nif' => ['required', 'integer'],
             'address' => ['required', 'string', 'max:255'],
             'default_payment_type' => ['required', 'in:VISA,MC,PAYPAL'],
             'default_payment_ref' => ['required', 'string', 'max:255'],
@@ -78,10 +79,12 @@ class RegisterController extends Controller
             'blocked' => 0,
             'nif' => $data['nif'],
             'address' => $data['address'],
+            'default_payment_type' => $data['default_payment_type'],
+            'default_payment_ref' => $data['default_payment_ref'],
 
         ]);
         Cliente::create([
-            'client_id' => $newUser->id,
+            'id' => $newUser->id,
             'nif' => $newUser->nif,
             'address' => $newUser->address,
             'default_payment_type' => $data['default_payment_type'],
