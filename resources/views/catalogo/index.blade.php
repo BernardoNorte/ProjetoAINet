@@ -32,21 +32,19 @@
 <div class="col mb-5">
     <div class="card h-100">
         <!-- Product image-->
-        <img class="card-img-top" src="{{ $item->imagem_url ? asset('storage/estampas/' . $item->imagem_url) : asset('img/default_img.png') }}" alt="..." style="max-height=250px;"/>
+        <img class="card-img-top" src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." style="max-height=250px;"/>
         <!-- Product details-->
         <div class="card-body p-4">
             {{-- <div class="text-center">
                 <!-- Product name-->
-                <h5 class="fw-bolder">{{$item->nome}}</h5>
-                <!-- Product price-->
-                $40.00 - $80.00
+                <h5 class="fw-bolder">{{$item->name}}</h5>
             </div> --}}
         </div>
         <!-- Product actions-->
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 
-            <h5 class="fw-bolder text-center">{{$item->nome}}</h5>
-            <h6 class="text-center">{{session('preco_un_catalogo') . " €"}}</h6>
+            <h5 class="fw-bolder text-center">{{$item->name}}</h5>
+            <h6 class="text-center">{{session('unit_price_catalog') . " €"}}</h6>
             @cannot('GateAdministrador')
             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#" data-toggle="modal" data-target="{{'#modal'.$item->id}}">Comprar</a></div>
             @endcannot
@@ -74,7 +72,7 @@
             <div class="form-group">
 
                 <input type="hidden" name="idEstampa" id="inputId" value="{{$item->id}}">
-                <input type="hidden" name="imagem_url" id="inputImagem_url" value="{{$item->imagem_url}}">
+                <input type="hidden" name="image_url" id="inputimage_url" value="{{$item->image_url}}">
                 <label for="exampleFormControlSelect1">Cor</label>
             <select class="form-control" id="exampleFormControlSelect1" name="cor_codigo" required>
         @foreach ($cores as $cor)
