@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ClientePost;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use PDF;
+use Mail;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ClienteRequest;
+
 
 class ClienteController extends Controller
 {
@@ -24,40 +29,57 @@ class ClienteController extends Controller
         return view('clientes.index', compact('clientes', 'filterByNome'));
     }
 
-    public function edit(Cliente $cliente)
+    public function edit(Cliente $cliente): View
     {
 
         return view('clientes.edit')->withCliente($cliente);
     }
 
-    public function update(ClientePost $request, Cliente $cliente)
+    public function update(ClienteRequest $request, Cliente $cliente): RedirectResponse
     {
 
-        $validated_data = $request->validated();
-        $cliente->user->name = $validated_data['name'];
-        $cliente->user->email = $validated_data['email'];
-        $cliente->nif = $validated_data['nif'];
-        $cliente->endereco = $validated_data['endereco'];
-        $cliente->tipo_pagamento = $validated_data['tipo_pagamento'];
-        $cliente->ref_pagamento = $validated_data['ref_pagamento'];
-        $cliente->user->bloqueado = $validated_data['bloqueado'];
+        $formData = $request->validated();
+        $cliente = DB::transaction(function () use ($formData, $cliente, $request){
+            $cliente->user->name = $formData['name'];
+            $cliente->user->email = $formData['email'];
+            $cliente->nif = $formData['nif'];
+            $cliente->address = $formData['address'];
+            $cliente->default_payment_type = $formData['default_payment_type'];
+            $cliente->default_payment_ref = $formData['default_payment_ref'];
+            $cliente->user->blocked = $formData['blocked'];
 
+            if ($request->hasFile('file_foto')) {
+                if ($cliente->user->photo_url){
+                    Storage::delete('public/photos/' . $cliente->user->photo_url);
+                }
+                $path = $request->photo_url->store('public/photos');
+                $cliente->user->photo_url = basename($path);
+                $cliente->user->save();
+            }
+            $cliente->user->save();
+    
+            $cliente->save();
+        });
+        return $cliente;
+        $url = route('clientes.show', ['cliente' => $cliente]);
+            $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
+                            <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
+            return redirect()->route('clientes.index')
+                ->with('alert-msg', $htmlMessage)
+                ->with('alert-type', 'success');
+    }
 
-        if ($request->hasFile('foto_url')) {
-            Storage::delete('public/fotos/' . $cliente->user->foto_url);
-            $path = $request->foto_url->store('public/fotos');
-            $cliente->user->foto_url = basename($path);
+    public function destroy_foto(Cliente $cliente): RedirectResponse
+    {
+        if ($cliente->user->photo_url){
+            Storage::delete('public/photos/' . $cliente->user->photo_url);
+            $cliente->user->photo_url = null;
             $cliente->user->save();
         }
-        $cliente->user->save();
 
-        $cliente->save();
-        $url = route('clientes.show', ['cliente' => $cliente]);
-        $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
-                        <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
-        return redirect()->route('clientes.index')
-            ->with('alert-msg', $htmlMessage)
-            ->with('alert-type', 'success');
+        return redirect()->route('clientes.edit', ['cliente' => $cliente])
+            ->with('alert-msg', 'Cliente Photo "' . $cliente->user->name . '"was removed!')
+            ->with('alert-type', ' Success');
     }
 
     public function show(Cliente $cliente): View

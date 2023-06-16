@@ -14,7 +14,7 @@ class Cliente extends Model
     use HasFactory;
     use SoftDeletes;
     public $timestamps = false;
-    protected $fillable = ['id','nif', 'address', 'payment_type','payment_ref'];
+    protected $fillable = ['id','nif', 'address', 'default_payment_type','default_payment_ref'];
 
     public function user(): BelongsTo
     {

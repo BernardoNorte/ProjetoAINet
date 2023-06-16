@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EncomendaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ClienteController;
+
 use App\Http\Controllers\CatalogoController;
+
+use App\Http\Controllers\Auth\ChangePasswordController;
 
 Auth::routes();
 
@@ -32,8 +35,18 @@ Route::view('/', 'home')->name('root');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('clientes', ClienteController::class);
+Route::resource('clientes', ClienteController::class)->middleware('verified');
 
 Route::resource('catalogo', CatalogoController::class);
 
 Route::get('/catalogo', [App\Http\Controllers\CatalogoController::class, 'index'])->name('catalogo.index');
+
+Route::get('/password/change', [ChangePasswordController::class, 'show'])->name('password.change.show');
+Route::post('/password/change', [ChangePasswordController::class, 'store'])->name('password.change.store');
+
+Auth::routes(['verify' => true]);
+
+Route::delete('clientes/{cliente}/photo', [ClienteController::class, 'destroy_foto'])->name('clientes.foto.destroy');
+
+
+//Route::view('/', 'catalogo')->name('catalogo');

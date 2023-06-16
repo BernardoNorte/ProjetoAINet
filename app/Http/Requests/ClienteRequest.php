@@ -31,11 +31,12 @@ class ClienteRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($this->id),
             ],
+            'id' => 'required',
             'nif' => 'required|digits:9',
-            'endereco' => 'required',
-            'tipo_pagamento' => 'required|in:MC,PAYPAL,VISA',
-            'ref_pagamento' => 'required',
-            'foto_url' => 'nullable|image|max:8192',
+            'address' => 'required',
+            'default_payment_type' => 'required|in:MC,PAYPAL,VISA',
+            'default_payment_ref' => 'required',
+            'photo_url' => 'nullable|image|max:8192',
             'password_inicial' => 'sometimes|required',
             'bloqueado' => 'required|boolean'
         ];
@@ -45,17 +46,19 @@ class ClienteRequest extends FormRequest
     {
         return [
             'name.required' =>  'O nome é obrigatório',
+            'id.required' => 'O id é obrigatório',
+            'id.unique' => 'O id é único',
             'email.required' => 'O email é obrigatório',
             'email.email' =>    'O formato do email é inválido',
             'email.unique' =>   'O email tem que ser único',
             'nif.required' =>   'O nif é obrigatório',
             'nif.integer' =>    'O nif tem que ser inteiro',
-            'tipo_pagamento.required' => 'O tipo de pagamento é obrigatório',
-            'tipo_pagamento.in' => 'O tipo de pagamento tem de ser MC, Paypal, Visa',
-            'ref_pagamento.required' => 'A referência de pagamento é obrigatória',
-            'ref_pagamento.char' => 'A referência de pagamento tem de ser com caracteres',
-            'file_foto.image' => 'O ficheiro com a foto não é uma imagem',
-            'file_foto.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
+            'default_payment_type.required' => 'O tipo de pagamento é obrigatório',
+            'default_payment_type.in' => 'O tipo de pagamento tem de ser MC, Paypal, Visa',
+            'default_payment_ref.required' => 'A referência de pagamento é obrigatória',
+            'default_payment_ref.char' => 'A referência de pagamento tem de ser com caracteres',
+            'photo_url.image' => 'O ficheiro com a foto não é uma imagem',
+            'photo_url.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
             'password_inicial.required' => 'A password inicial é obrigatória',
         ];
     }
