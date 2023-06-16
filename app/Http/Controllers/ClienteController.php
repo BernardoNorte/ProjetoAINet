@@ -40,33 +40,32 @@ class ClienteController extends Controller
 
         $formData = $request->validated();
         $cliente = DB::transaction(function () use ($formData, $cliente, $request){
-            $cliente->user->name = $formData['name'];
-            $cliente->user->email = $formData['email'];
             $cliente->nif = $formData['nif'];
             $cliente->address = $formData['address'];
             $cliente->default_payment_type = $formData['default_payment_type'];
             $cliente->default_payment_ref = $formData['default_payment_ref'];
-            $cliente->user->blocked = $formData['blocked'];
-
+            $cliente->save();
+            $user = $cliente->user;
+            $user->name = $formData['name'];
+            $user->email = $formData['email'];
+            $user->blocked = $formData['blocked'];
+            $user->save();
             if ($request->hasFile('file_foto')) {
                 if ($cliente->user->photo_url){
                     Storage::delete('public/photos/' . $cliente->user->photo_url);
                 }
                 $path = $request->photo_url->store('public/photos');
                 $cliente->user->photo_url = basename($path);
-                $cliente->user->save();
+                $user->save();
             }
-            $cliente->user->save();
-    
-            $cliente->save();
+            return $cliente;
         });
-        return $cliente;
         $url = route('clientes.show', ['cliente' => $cliente]);
-            $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
-                            <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
-            return redirect()->route('clientes.index')
-                ->with('alert-msg', $htmlMessage)
-                ->with('alert-type', 'success');
+        $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
+                        <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
+        return redirect()->route('clientes.index')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
     }
 
     public function destroy_foto(Cliente $cliente): RedirectResponse

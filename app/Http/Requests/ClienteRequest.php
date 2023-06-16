@@ -26,11 +26,7 @@ class ClienteRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users', 'email')->ignore($this->id),
-            ],
+            'email' => 'required',
             'id' => 'required',
             'nif' => 'required|digits:9',
             'address' => 'required',
@@ -53,6 +49,7 @@ class ClienteRequest extends FormRequest
             'email.unique' =>   'O email tem que ser único',
             'nif.required' =>   'O nif é obrigatório',
             'nif.integer' =>    'O nif tem que ser inteiro',
+            'nif.unique' => 'O nif tem que ser unico',
             'default_payment_type.required' => 'O tipo de pagamento é obrigatório',
             'default_payment_type.in' => 'O tipo de pagamento tem de ser MC, Paypal, Visa',
             'default_payment_ref.required' => 'A referência de pagamento é obrigatória',

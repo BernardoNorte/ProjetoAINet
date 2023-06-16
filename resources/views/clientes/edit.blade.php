@@ -13,7 +13,7 @@
 <body>
     @extends('template.layout')
 
-    @section('header-title', "Alterar $cliente->user->name")
+    @section('header-title', "Alterar Cliente")
 
     @section('subtitulo')
         <ol class="breadcrumb">
@@ -32,8 +32,8 @@
                 @include('users.shared.fields', ['user' => $cliente->user, 'readonlyData' => false])
                 @include('clientes.shared.fields', ['cliente' => $cliente, 'readonlyData' => false])
                 <div class="my-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary" name="ok">Save</button>
-                    <a href="{{ route('clientes.edit', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">Cancel</a>
+                    <button type="submit" class="btn btn-primary" name="ok" form="form_cliente">Save</button>
+                    <a href="{{ route('clientes.show', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">Cancel</a>
                 </div>
             </div>
                 <div class="ps-2 mt-5 mt-md-1 d-flex mx-auto flex-column align-items-center justify-content-between"
@@ -46,6 +46,14 @@
                 </div>
         </div>
     </form>
+    @include('shared.confirmationDialog', [
+        'title' => 'Apagar fotografia',
+        'msgLine1' => 'As alterações efetuadas aos dados do cliente vão ser perdidas!',
+        'msgLine2' => 'Clique no botão "Apagar" para confirmar a operação.',
+        'confirmationButton' => 'Apagar fotografia',
+        'formAction' => route('clientes.foto.destroy', ['cliente' => $cliente->user->cliente]),
+        'formMethod' => 'DELETE',
+    ])
     @endsection
 </body>
 

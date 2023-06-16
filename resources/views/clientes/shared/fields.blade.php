@@ -33,8 +33,11 @@
         @enderror
 </div>
 <div class="mb-3 form-floating">
-        <input type="text" class="form-control @error('default_payment_type') is-invalid @enderror" name="default_payment_type" id="inputDefaultPaymentType"
-            {{ $disabledStr }} value="{{ old('default_payment_type', $cliente->default_payment_type) }}">
+        <select id="default_payment_type" class="form-select @error('default_payment_type') is-invalid @enderror" name="default_payment_type" required>
+            <option value="VISA" {{ old('default_payment_type', 'VISA') == 'VISA' ? 'selected' : '' }}>Visa</option>
+            <option value="MC" {{ old('default_payment_type', 'MC') == 'MC' ? 'selected' : '' }}>MC</option>
+            <option value="PAYPAL" {{ old('default_payment_type', 'PAYPAL') == 'PAYPAL' ? 'selected' : '' }}>PayPal</option>
+        </select>
         <label for="inputDefaultPaymentType" class="form-label">Payment Type</label>
         @error('default_payment_type')
             <div class="invalid-feedback">
