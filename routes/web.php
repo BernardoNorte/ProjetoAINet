@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EncomendaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CatalogoController;
 
 Auth::routes();
 
@@ -35,4 +36,4 @@ Route::resource('clientes', ClienteController::class);
 
 Route::resource('catalogo', CatalogoController::class);
 
-//Route::view('/', 'catalogo')->name('catalogo');
+Route::get('/catalogo', [App\Http\Controllers\CatalogoController::class, 'index'])->name('catalogo.index');
