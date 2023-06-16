@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Http\\Controllers\\Auth\\ChangePasswordController' => $baseDir . '/app/Http/Controllers/Auth/ChangePasswordController.php',
     'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
@@ -40,6 +41,7 @@ return array(
     'App\\Http\\Middleware\\ValidateSignature' => $baseDir . '/app/Http/Middleware/ValidateSignature.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Http\\Requests\\CategoriaRequest' => $baseDir . '/app/Http/Requests/CategoriaRequest.php',
+    'App\\Http\\Requests\\ChangePasswordRequest' => $baseDir . '/app/Http/Requests/ChangePasswordRequest.php',
     'App\\Http\\Requests\\ClienteRequest' => $baseDir . '/app/Http/Requests/ClienteRequest.php',
     'App\\Http\\Requests\\CoresRequest' => $baseDir . '/app/Http/Requests/CoresRequest.php',
     'App\\Http\\Requests\\EncomendaRequest' => $baseDir . '/app/Http/Requests/EncomendaRequest.php',
