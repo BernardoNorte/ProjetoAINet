@@ -10,7 +10,7 @@ class Encomenda extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['status', 'customer_id','date', 'total_price', 'notes', 'nif', 'address','payment_type','payment_ref'];
+    protected $fillable = ['status', 'customer_id','date', 'total_price', 'notes', 'nif', 'address','payment_type','payment_ref', 'receipt_url'];
 
     public function clientes(): BelongsTo
     {

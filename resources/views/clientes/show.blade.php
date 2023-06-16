@@ -20,11 +20,11 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" name="delete" class="btn btn-danger">
-                            Apagar cliente
+                            Delete cliente
                         </button>
                     </form>
                     <a href="{{ route('clientes.edit', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">
-                        Alterar cliente
+                        Change client
                     </a>
                 </div>
             </div>

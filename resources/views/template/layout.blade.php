@@ -25,7 +25,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'encomendas.index' ? 'active' : ''}}" href="{{ route('encomendas.index') }}">Orders</a></li>
+                        @if ((Auth::user()->user_type ?? '') == 'E' || (Auth::user()->user_type ?? '') == 'A')
+                            <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'encomendas.index' ? 'active' : ''}}" href="{{ route('encomendas.index') }}">Orders</a></li>
+                        @endif
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -35,7 +37,9 @@
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'clientes.index' ? 'active' : ''}}" href="{{ route('clientes.index') }}">Clients</a></li>
+                        @if ((Auth::user()->user_type ?? '') == 'A')
+                            <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'clientes.index' ? 'active' : ''}}" href="{{ route('clientes.index') }}">Clients</a></li>
+                        @endif
                     </ul>
         @guest
             <ul class="navbar-nav ms-auto me-1 me-lg-3">

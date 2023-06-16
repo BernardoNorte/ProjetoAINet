@@ -32,11 +32,16 @@ Route::view('/', 'home')->name('root');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('clientes', ClienteController::class);
+Route::resource('clientes', ClienteController::class)->middleware('verified');
 
 Route::resource('catalogo', CatalogoController::class);
 
 Route::get('/password/change', [ChangePasswordController::class, 'show'])->name('password.change.show');
 Route::post('/password/change', [ChangePasswordController::class, 'store'])->name('password.change.store');
+
+Auth::routes(['verify' => true]);
+
+Route::delete('clientes/{cliente}/photo', [ClienteController::class, 'destroy_foto'])->name('clientes.foto.destroy');
+
 
 //Route::view('/', 'catalogo')->name('catalogo');

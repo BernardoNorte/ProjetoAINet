@@ -34,6 +34,7 @@
         'clientes' => $clientes,
         'showContatos' => true,
         'showDetail' => true,
+        'showPhoto' => true,
     ])
     <div>
         <div>

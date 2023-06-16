@@ -1,7 +1,8 @@
 <table class="table">
     <thead class="table-dark">
         <tr>
-            <th>Nome</th>
+            <th>Photo</th>
+            <th>Name</th>
             <th>NIF</th>
             <th>Address</th>
             @if ($showContatos)
@@ -16,6 +17,11 @@
     <tbody>
         @foreach ($clientes as $cliente)
             <tr>
+                @if ($showPhoto)
+                    <td witdth="45">
+                        <img src="{{ $cliente->user->fullPhotoUrl }}" alt="Avatar" class="bg-dark rounded-circle" width="45" height="45">
+                    </td>
+                @endif
                 <td>{{$cliente->user->name}}</td>
                 <td>{{$cliente->nif}}</td>
                 <td>{{$cliente->address}}</td>
