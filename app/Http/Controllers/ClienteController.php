@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ClientePost;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use PDF;
+use Mail;
+use Illuminate\Support\Facades\Auth;
+
 
 class ClienteController extends Controller
 {
@@ -24,7 +28,7 @@ class ClienteController extends Controller
         return view('clientes.index', compact('clientes', 'filterByNome'));
     }
 
-    public function edit(Cliente $cliente)
+    public function edit(Cliente $cliente): View
     {
 
         return view('clientes.edit')->withCliente($cliente);

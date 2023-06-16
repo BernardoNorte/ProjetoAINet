@@ -68,8 +68,12 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Change Password</a></li>
+                        @if ((Auth::user()->user_type ?? '') == 'C')
+                            <li><a class="dropdown-item"
+                                    href="{{ route('clientes.show', ['cliente' => Auth::user()->cliente]) }}">Profile</a></li>
+                        
+                        @endif
+                        <li><a class="dropdown-item" href="{{ route('password.change.show') }}">Change Password</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
@@ -110,9 +114,7 @@
                     </div>
                 </div>
             </main>
-            <footer class="py-5 bg-dark">
-                <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
-            </footer>
+            
         </div>
         <!-- Bootstrap core JS-->
         <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->

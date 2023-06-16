@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EncomendaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 
 Auth::routes();
 
@@ -34,5 +35,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('clientes', ClienteController::class);
 
 Route::resource('catalogo', CatalogoController::class);
+
+Route::get('/password/change', [ChangePasswordController::class, 'show'])->name('password.change.show');
+Route::post('/password/change', [ChangePasswordController::class, 'store'])->name('password.change.store');
 
 //Route::view('/', 'catalogo')->name('catalogo');
