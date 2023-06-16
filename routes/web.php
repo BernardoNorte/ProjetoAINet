@@ -32,7 +32,7 @@ Route::view('/', 'home')->name('root');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('clientes', ClienteController::class)->middleware('verified');
+Route::resource('clientes', ClienteController::class);//->middleware('verified');
 
 Route::resource('catalogo', CatalogoController::class);
 
