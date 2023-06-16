@@ -1,7 +1,7 @@
-@extends('layout')
+@extends('template.layout')
 @section('title','Catalogo')
 
-@section('content')
+@section('main')
 
 <head>
     <meta charset="utf-8" />
