@@ -24,6 +24,16 @@
     @enderror
 </div>
 @if ((Auth::user()->user_type ?? '') == 'A')
+    <div class="mb-3 form-floating">
+        <input type="text" class="form-control @error('blocked') is-invalid @enderror" name="blocked" id="inputBlocked"
+            {{ $disabledStr }} value="{{ old('blocked', $user->blocked) }}">
+        <label for="inputBlocked" class="form-label">Blocked</label>
+        @error('blocked')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
     <div class="mb-3">
         <div class="form-check form-switch" {{ $disabledStr }}>
             <input type="hidden" name="admin" value="0">

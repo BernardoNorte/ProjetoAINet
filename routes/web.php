@@ -49,6 +49,8 @@ Route::post('/password/change', [ChangePasswordController::class, 'store'])->nam
 Auth::routes(['verify' => true]);
 
 Route::delete('clientes/{cliente}/photo', [ClienteController::class, 'destroy_foto'])->name('clientes.foto.destroy');
+Route::delete('users/{user}/photo', [UserController::class, 'destroy_foto'])->name('users.foto.destroy');
+
 
 Route::get('tshirts', [TshirtController::class, 'index'])->name('tshirts.index');
 

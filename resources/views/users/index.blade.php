@@ -26,7 +26,7 @@
             </div>
             <div class="flex-shrink-1 d-flex flex-column justify-content-between">
                 <button type="submit" class="btn btn-primary mb-3 px-4 flex-grow-1" name="filtrar">Filter</button>
-                <a href="{{ route('users.index') }}" class="btn btn-secondary mb-3 py-3 px-4 flex-shrink-1">Clean</a>
+                <a href="{{ route('users.index') }}" class="btn btn-secondary mb-3 py-3 px-4 flex-shrink-1">Clear</a>
             </div>
         </div>
     </form>
