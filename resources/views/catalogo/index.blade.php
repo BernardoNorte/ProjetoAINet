@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@yield('title')</title>
     <link href="{{ asset('css/catalogo.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/scripts.js') }}" rel="stylesheet"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 
 <!-- Header -->
 <header class="bg-dark py-5">
@@ -121,13 +121,5 @@
 
 </section>
 {{ $catalogo->withQueryString()->links() }}
-
-<script>
-    // Quando o usuário clicar no <div>, abre o popup correspondente
-    function myFunction(popupId) {
-        var popup = document.getElementById(popupId);
-        popup.classList.toggle("show");
-    }
-</script>
 
 @endsection
