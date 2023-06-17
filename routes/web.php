@@ -8,6 +8,7 @@ use App\Http\Controllers\ClienteController;
 
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\TshirtController;
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 
@@ -50,5 +51,7 @@ Auth::routes(['verify' => true]);
 Route::delete('clientes/{cliente}/photo', [ClienteController::class, 'destroy_foto'])->name('clientes.foto.destroy');
 
 Route::get('tshirts', [TshirtController::class, 'index'])->name('tshirts.index');
+
+Route::resource('users', UserController::class);
 
 //Route::view('/', 'catalogo')->name('catalogo');

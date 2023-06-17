@@ -1,19 +1,19 @@
 @extends('template.layout')
 
-@section('titulo', 'Clientes')
+@section('titulo', 'Users')
 
 @section('subtitulo')
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Clients</li>
-        <li class="breadcrumb-item active">List of Clients</li>
+        <li class="breadcrumb-item">Users</li>
+        <li class="breadcrumb-item active">List of Employees</li>
     </ol>
 @endsection
 
 @section('main')
     <p>
-        <a class="btn btn-success" href="{{ route('clientes.create') }}"><i class="fas fa-plus"></i> &nbsp;Create new Client</a>
+        <a class="btn btn-success" href="{{ route('users.create') }}"><i class="fas fa-plus"></i> &nbsp;Create new Employee</a>
     </p>
-    <form method="GET" action="{{ route('clientes.index') }}">
+    <form method="GET" action="{{ route('users.index') }}">
         <div class="d-flex justify-content-between">
             <div class="flex-grow-1 pe-2">
                 <div class="d-flex justify-content-between">
@@ -26,18 +26,18 @@
             </div>
             <div class="flex-shrink-1 d-flex flex-column justify-content-between">
                 <button type="submit" class="btn btn-primary mb-3 px-4 flex-grow-1" name="filtrar">Filter</button>
-                <a href="{{ route('clientes.index') }}" class="btn btn-secondary mb-3 py-3 px-4 flex-shrink-1">Clear</a>
+                <a href="{{ route('users.index') }}" class="btn btn-secondary mb-3 py-3 px-4 flex-shrink-1">Clean</a>
             </div>
         </div>
     </form>
-    @include('clientes.shared.table', [
-        'clientes' => $clientes,
+    @include('users.shared.table', [
+        'users' => $users,
         'showContatos' => true,
         'showDetail' => true,
         'showPhoto' => true,
     ])
     <div>
         <div>
-            {{ $clientes->links() }}
+            {{ $users->links() }}
         </div>
 @endsection
