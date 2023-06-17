@@ -7,6 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@yield('title')</title>
+    <link href="{{ asset('css/catalogo.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -43,7 +44,12 @@
 
             <h5 class="fw-bolder text-center">{{$item->name}}</h5>
             <h6 class="text-center">{{session('unit_price_catalog') . " €"}}</h6>
-            <h7 class="text-center">{{$item->description}}</h7>
+            <div class="popup" onclick="myFunction('popup{{$item->id}}')">
+                <h6 class="text-center">Description</h6>
+                <span class="popuptext" id="popup{{$item->id}}">
+                    <p>{{$item->description}}</p>
+                </span>
+            </div>
             @cannot('GateAdministrador')
             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#" data-toggle="modal" data-target="{{'#modal'.$item->id}}">Comprar</a></div>
             @endcannot
@@ -112,6 +118,16 @@
 @endforeach
 </div>
 </div>
+
 </section>
 {{ $catalogo->withQueryString()->links() }}
+
+<script>
+    // Quando o usuário clicar no <div>, abre o popup correspondente
+    function myFunction(popupId) {
+        var popup = document.getElementById(popupId);
+        popup.classList.toggle("show");
+    }
+</script>
+
 @endsection
