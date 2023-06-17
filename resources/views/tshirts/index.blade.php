@@ -1,7 +1,7 @@
-@extends('layout')
+@extends('template.layout')
 @section('title','TShirts')
 
-@section('content')
+@section('main')
 
     <table class="table">
         <thead>

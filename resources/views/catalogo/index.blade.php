@@ -45,6 +45,7 @@
 
             <h5 class="fw-bolder text-center">{{$item->name}}</h5>
             <h6 class="text-center">{{session('unit_price_catalog') . " €"}}</h6>
+            <h7 class="text-center">{{$item->description}}</h7>
             @cannot('GateAdministrador')
             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#" data-toggle="modal" data-target="{{'#modal'.$item->id}}">Comprar</a></div>
             @endcannot

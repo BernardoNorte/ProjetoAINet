@@ -37,9 +37,8 @@ class ClienteController extends Controller
 
     public function update(ClienteRequest $request, Cliente $cliente): RedirectResponse
     {
-
         $formData = $request->validated();
-        $cliente = DB::transaction(function () use ($formData, $cliente, $request){
+        $cliente = DB::transaction(function () use ($formData, $cliente){
             $cliente->nif = $formData['nif'];
             $cliente->address = $formData['address'];
             $cliente->default_payment_type = $formData['default_payment_type'];
@@ -60,7 +59,7 @@ class ClienteController extends Controller
             }
             return $cliente;
         });
-        $url = route('clientes.show', ['cliente' => $cliente]);
+        $url = route('clientes.index', ['cliente' => $cliente]);
         $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
                         <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
         return redirect()->route('clientes.index')

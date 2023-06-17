@@ -32,7 +32,7 @@
                 @include('users.shared.fields', ['user' => $cliente->user, 'readonlyData' => false])
                 @include('clientes.shared.fields', ['cliente' => $cliente, 'readonlyData' => false])
                 <div class="my-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary" name="ok" form="form_cliente">Save</button>
+                    <button type="submit" class="btn btn-primary" name="ok">Save</button>
                     <a href="{{ route('clientes.show', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">Cancel</a>
                 </div>
             </div>
