@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/catalogo.css') }}" rel="stylesheet">
 </head>
 
 
@@ -17,7 +16,6 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
         </div>
     </div>
 </header>
@@ -45,6 +43,7 @@
 
             <h5 class="fw-bolder text-center">{{$item->name}}</h5>
             <h6 class="text-center">{{session('unit_price_catalog') . " €"}}</h6>
+            <h7 class="text-center">{{$item->description}}</h7>
             @cannot('GateAdministrador')
             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#" data-toggle="modal" data-target="{{'#modal'.$item->id}}">Comprar</a></div>
             @endcannot
