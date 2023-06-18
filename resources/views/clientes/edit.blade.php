@@ -24,7 +24,7 @@
     @endsection
 
     @section('main')
-    <form method="POST" action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
+    <form id="form_cliente" method="POST" action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
@@ -32,7 +32,7 @@
                 @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
                 @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => false])
                 <div class="my-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary" name="ok">Save</button>
+                    <button type="submit" class="btn btn-primary" name="ok" form="form_cliente">Save</button>
                     <a href="{{ route('clientes.show', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">Cancel</a>
                 </div>
             </div>

@@ -32,7 +32,7 @@ class ClienteRequest extends FormRequest
             'address' => 'nullable',
             'default_payment_type' => 'nullable|in:MC,PAYPAL,VISA',
             'default_payment_ref' => 'nullable',
-            'photo_url' => 'sometimes|image|max:8192',
+            'file_foto' => 'nullable|image|max:8192',
             'password_inicial' => 'sometimes|required',
             'bloqueado' => 'required|boolean'
         ];
@@ -51,8 +51,8 @@ class ClienteRequest extends FormRequest
             'nif.unique' => 'O nif tem que ser unico',
             'default_payment_type.in' => 'O tipo de pagamento tem de ser MC, Paypal, Visa',
             'default_payment_ref.char' => 'A referência de pagamento tem de ser com caracteres',
-            'photo_url.image' => 'O ficheiro com a foto não é uma imagem',
-            'photo_url.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
+            'file_foto.image' => 'O ficheiro com a foto não é uma imagem',
+            'file_foto.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
             'password_inicial.required' => 'A password inicial é obrigatória',
         ];
     }

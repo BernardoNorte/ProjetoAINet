@@ -40,7 +40,7 @@ class UserController extends Controller
     public function store(UserRequest $request): RedirectResponse
     {
         $formData = $request->validated();
-        $user = DB::transaction(function () use ($formData){
+        $user = DB::transaction(function () use ($formData, $request){
             $newUser = new User();
             $newUser->name = $formData['name'];
             $newUser->email = $formData['email'];
@@ -48,6 +48,11 @@ class UserController extends Controller
             $newUser->user_type = $formData['user_type'];
             $newUser->password = Hash::make($formData['password_inicial']);
             $newUser->save();
+            if ($request->hasFile('file_foto')) {
+                $path = $request->file_foto->store('public/photos');
+                $newUser->photo_url = basename($path);
+                $newUser->save();
+            }
             return $newUser;
         });
         $url = route('users.show', ['user' => $user]);
