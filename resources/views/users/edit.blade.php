@@ -29,7 +29,7 @@
         @method('PUT')
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
             <div class="flex-grow-1 pe-2">
-                @include('users.shared.fields', ['user' => $user, 'readonlyData' => false])
+            @include('users.shared.fields', ['user' => $user, 'showBlocked' => true, 'showUserType' => true,'readonlyData' => false])
                 <div class="my-4 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary" name="ok">Save</button>
                     <a href="{{ route('users.show', ['user' => $user]) }}" class="btn btn-secondary ms-3">Cancel</a>

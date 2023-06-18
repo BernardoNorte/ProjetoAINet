@@ -13,7 +13,7 @@
     <div>
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
             <div class="flex-grow-1 pe-2">
-                @include('users.shared.fields', ['user' => $user, 'readonlyData' => true])
+                @include('users.shared.fields', ['user' => $user, 'showBlocked' => true, 'showUserType' => true,'readonlyData' => true])
                 <div class="my-1 d-flex justify-content-end">
                     <form method="POST" action="{{ route('users.destroy', ['user' => $user]) }}">
                         @csrf

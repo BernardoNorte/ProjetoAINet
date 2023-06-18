@@ -33,7 +33,7 @@ class UserRequest extends FormRequest
             'user_type' => 'required|in:C,E,A',
             'blocked' => 'required:boolean',
             'photo_url' => 'nullable',
-            'password_incial' => 'sometimes|required'
+            'password_inicial' => 'sometimes|required'
         ];
     }
 

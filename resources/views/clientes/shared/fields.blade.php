@@ -2,6 +2,7 @@
     $disabledStr = $readonlyData ?? false ? 'disabled' : '';
 @endphp
 
+@if ($showID)
 <div class="mb-3 form-floating">
         <input type="text" class="form-control @error('numero') is-invalid @enderror" name="numero" id="inputNumero"
             {{ $disabledStr }} value="{{ old('id', $cliente->id) }}">
@@ -12,6 +13,7 @@
             </div>
         @enderror
 </div>
+@endif
 <div class="mb-3 form-floating">
         <input type="text" class="form-control @error('nif') is-invalid @enderror" name="nif" id="inputNif"
             {{ $disabledStr }} value="{{ old('nif', $cliente->nif) }}">

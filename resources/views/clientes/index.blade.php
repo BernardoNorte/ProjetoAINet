@@ -35,6 +35,7 @@
         'showContatos' => true,
         'showDetail' => true,
         'showPhoto' => true,
+        'showID' => false,
     ])
     <div>
         <div>
