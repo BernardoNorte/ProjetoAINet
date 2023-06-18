@@ -26,7 +26,6 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->user_type}}</td>
                 <td>{{$user->blocked}}</td>
-                <td></td>
                 @if ($showDetail)
                     <td class="button-icon-col"><a class="btn btn-secondary"
                             href="{{ route('users.show', ['user' => $user]) }}">
