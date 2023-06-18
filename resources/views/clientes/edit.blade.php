@@ -29,8 +29,16 @@
         @method('PUT')
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
             <div class="flex-grow-1 pe-2">
-                @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
-                @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => false])
+                @if ((Auth::user()->user_type ?? '') == 'A')
+                    @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => true])
+                @else
+                    @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
+                @endif
+                @if ((Auth::user()->user_type ?? '') == 'A')
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => true])
+                @else 
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => false])
+                @endif
                 <div class="my-4 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary" name="ok" form="form_cliente">Save</button>
                     <a href="{{ route('clientes.show', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">Cancel</a>
@@ -38,11 +46,20 @@
             </div>
                 <div class="ps-2 mt-5 mt-md-1 d-flex mx-auto flex-column align-items-center justify-content-between"
                     style="min-width:260px; max-width:260px;">
-                    @include('users.shared.fields_foto', [
-                        'user' => $cliente->user,
-                        'allowUpload' => true,
-                        'allowDelete' => true,
-                    ])
+                    @if ((Auth::user()->user_type ?? '') == 'A')
+                        @include('users.shared.fields_foto', [
+                            'user' => $cliente->user,
+                            'allowUpload' => false,
+                            'allowDelete' => false,
+                            'allowBlocked' => true,
+                        ])
+                    @else 
+                        @include('users.shared.fields_foto', [
+                            'user' => $cliente->user,
+                            'allowUpload' => true,
+                            'allowDelete' => true,
+                        ])
+                    @endif
             </div>
         </div>
     </form>

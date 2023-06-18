@@ -25,14 +25,14 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required',
-            //[
-                //'required',
-                //'email',
-                //Rule::unique('users', 'email')->ignore($this->user_id),
-            //],
+            [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user_id),
+            ],
             'user_type' => 'required|in:C,E,A',
             'blocked' => 'required:boolean',
-            'photo_url' => 'nullable|image|max:8192',
+            'file_foto' => 'nullable|image|max:8192',
             'password_inicial' => 'sometimes|required'
         ];
     }
@@ -50,8 +50,6 @@ class UserRequest extends FormRequest
             'blocked.boolean' => 'O campo blocked tem que ser booleano',
             'file_foto.image' => 'O ficheiro com a foto não é uma foto',
             'file_foto.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
-            'photo_url.image' => 'O ficheiro com a foto não é uma foto',
-            'photo_url.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
             'password_inicial.required' => 'A password inicial é obrigatória',
         ];
     }

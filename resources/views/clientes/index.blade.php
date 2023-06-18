@@ -33,6 +33,7 @@
         'showDetail' => true,
         'showPhoto' => true,
         'showID' => false,
+        'showRemove' => true,
     ])
     <div>
         <div>

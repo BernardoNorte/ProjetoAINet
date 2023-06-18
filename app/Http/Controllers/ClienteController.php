@@ -49,6 +49,7 @@ class ClienteController extends Controller
             $user->name = $formData['name'];
             $user->email = $formData['email'];
             $user->blocked = $formData['blocked'];
+            $user->user_type = 'C';
             $user->save();
             if ($request->hasFile('file_foto')) {
                 if ($cliente->user->photo_url){
