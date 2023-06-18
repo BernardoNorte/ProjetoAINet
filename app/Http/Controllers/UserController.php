@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\userPost;
+use App\Http\Requests\ClientePost;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use PDF;
 use Mail;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\userRequest;
-
+use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\DB;
 
 
 class UserController extends Controller
@@ -44,30 +45,31 @@ class UserController extends Controller
     public function edit(User $user): View
     {
 
-        return view('users.edit')->withuser($user);
+        return view('users.edit')->withUser($user);
     }
 
     public function update(UserRequest $request, User $user): RedirectResponse
     {
         $formData = $request->validated();
-        $user = DB::transaction(function () use ($formData, $user){
+        $user = DB::transaction(function () use ($formData, $user, $request){
             $user->name = $formData['name'];
             $user->email = $formData['email'];
             $user->blocked = $formData['blocked'];
+            $user->user_type = $formData['user_type'];
             $user->save();
             if ($request->hasFile('file_foto')) {
-                if ($user->user->photo_url){
-                    Storage::delete('public/photos/' . $user->user->photo_url);
+                if ($user->photo_url){
+                    Storage::delete('public/photos/' . $user->photo_url);
                 }
                 $path = $request->photo_url->store('public/photos');
-                $user->user->photo_url = basename($path);
+                $user->photo_url = basename($path);
                 $user->save();
             }
             return $user;
         });
-        $url = route('users.index', ['user' => $user]);
+        $url = route('users.show', ['user' => $user]);
         $htmlMessage = "user <a href='$url'>#{$user->id}</a>
-                        <strong>\"{$user->user->name}\"</strong> foi alterado com sucesso!";
+                        <strong>\"{$user->name}\"</strong> foi alterado com sucesso!";
         return redirect()->route('users.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');

@@ -24,7 +24,7 @@
     @endsection
 
     @section('main')
-    <form method="POST" action="{{ route('users.update', ['user' => $user]) }}">
+    <form method="POST" action="{{ route('users.update', ['user' => $user]) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">

@@ -34,17 +34,19 @@
             </div>
         @enderror
     </div>
-    <div class="mb-3">
-        <div class="form-check form-switch" {{ $disabledStr }}>
-            <input type="hidden" name="admin" value="0">
-            <input type="checkbox" class="form-check-input @error('admin') is-invalid @enderror" name="admin"
-                id="inputOpcional" {{ $disabledStr }} {{ old('admin', $user->admin) ? 'checked' : '' }} value="1">
-            <label for="inputOpcional" class="form-check-label">Admin</label>
-            @error('admin')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
+    <div class="mb-3 form-floating">
+        <select class="form-select @error('user_type') is-invalid @enderror" name="user_type" id="inputUserType"
+            {{ $disabledStr }}>
+            <option {{ old('user_type', $user->user_type) == 'A' ? 'selected' : '' }} value="A">Admin
+            </option>
+            <option {{ old('user_type', $user->user_type) == 'E' ? 'selected' : '' }} value="E">Employee
+            </option>
+        </select>
+        <label for="inputUserType" class="form-label">User Type</label>
+        @error('user_type')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 @endif
