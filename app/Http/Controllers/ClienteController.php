@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use Illuminate\Support\Facades\Hash;
@@ -20,11 +19,12 @@ class ClienteController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->authorize('administrar');
         $filterByNome = $request->nome ?? '';
         $clienteQuery = Cliente::query();
         if ($filterByNome !== ''){
-            $userIds = User::where('name', 'like', "%$filterByNome%")->pluck('id');
-            $clienteQuery->whereIntegerInRaw('id', $userIds);
+            $clienteIds = cliente::where('name', 'like', "%$filterByNome%")->pluck('id');
+            $clienteQuery->whereIntegerInRaw('id', $clienteIds);
         }
         $clientes = $clienteQuery->paginate(5);
         return view('clientes.index', compact('clientes', 'filterByNome'));
@@ -45,25 +45,25 @@ class ClienteController extends Controller
             $cliente->default_payment_type = $formData['default_payment_type'];
             $cliente->default_payment_ref = $formData['default_payment_ref'];
             $cliente->save();
-            $user = $cliente->user;
-            $user->name = $formData['name'];
-            $user->email = $formData['email'];
-            $user->blocked = $formData['blocked'];
-            $user->user_type = 'C';
-            $user->save();
+            $cliente = $cliente->cliente;
+            $cliente->name = $formData['name'];
+            $cliente->email = $formData['email'];
+            $cliente->blocked = $formData['blocked'];
+            $cliente->cliente_type = 'C';
+            $cliente->save();
             if ($request->hasFile('file_foto')) {
-                if ($cliente->user->photo_url){
-                    Storage::delete('public/photos/' . $cliente->user->photo_url);
+                if ($cliente->cliente->photo_url){
+                    Storage::delete('public/photos/' . $cliente->cliente->photo_url);
                 }
                 $path = $request->photo_url->store('public/photos');
-                $cliente->user->photo_url = basename($path);
-                $user->save();
+                $cliente->cliente->photo_url = basename($path);
+                $cliente->save();
             }
             return $cliente;
         });
         $url = route('clientes.show', ['cliente' => $cliente]);
         $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
-                        <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
+                        <strong>\"{$cliente->cliente->name}\"</strong> foi alterado com sucesso!";
         return redirect()->route('clientes.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
@@ -71,20 +71,48 @@ class ClienteController extends Controller
 
     public function destroy_foto(Cliente $cliente): RedirectResponse
     {
-        if ($cliente->user->photo_url){
-            Storage::delete('public/photos/' . $cliente->user->photo_url);
-            $cliente->user->photo_url = null;
-            $cliente->user->save();
+        if ($cliente->cliente->photo_url){
+            Storage::delete('public/photos/' . $cliente->cliente->photo_url);
+            $cliente->cliente->photo_url = null;
+            $cliente->cliente->save();
         }
 
         return redirect()->route('clientes.edit', ['cliente' => $cliente])
-            ->with('alert-msg', 'Cliente Photo "' . $cliente->user->name . '"was removed!')
+            ->with('alert-msg', 'Cliente Photo "' . $cliente->cliente->name . '"was removed!')
             ->with('alert-type', ' Success');
     }
 
     public function show(Cliente $cliente): View
     {
         return view('clientes.show')->withCliente($cliente);
+    }
+
+    public function destroy(Cliente $cliente): RedirectResponse
+    {
+        $this->authorize('administrar');
+        try {
+            $user = $cliente->user;
+                DB::transaction(function () use ($cliente, $user) {
+                    $cliente->delete();
+                    $user->delete();
+                });
+                if ($cliente->user->photo_url) {
+                    Storage::delete('public/fotos/' . $cliente->user->photo_url);
+                }
+                $htmlMessage = "cliente #{$cliente->id}
+                        <strong>\"{$cliente->user->name}\"</strong> foi apagado com sucesso!";
+                return redirect()->route('clientes.index')
+                    ->with('alert-msg', $htmlMessage)
+                    ->with('alert-type', 'success');
+        } catch (\Exception $error) {
+            $url = route('clientes.show', ['cliente' => $cliente]);
+            $htmlMessage = "Não foi possível apagar o cliente <a href='$url'>#{$cliente->id}</a>
+                        <strong>\"{$cliente->name}\"</strong> porque ocorreu um erro!";
+            $alertType = 'danger';
+        }
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
     }
 
 }

@@ -37,6 +37,10 @@ Route::view('/', 'home')->name('root');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::middleware('can:administrar')->group(function () {
+    Route::resource('users', UserController::class);
+});
+
 Route::resource('clientes', ClienteController::class);//->middleware('verified');
 
 Route::resource('catalogo', CatalogoController::class);
@@ -54,6 +58,6 @@ Route::delete('users/{user}/photo', [UserController::class, 'destroy_foto'])->na
 
 Route::get('tshirts', [TshirtController::class, 'index'])->name('tshirts.index');
 
-Route::resource('users', UserController::class);
+//Route::resource('users', UserController::class);
 
 //Route::view('/', 'catalogo')->name('catalogo');

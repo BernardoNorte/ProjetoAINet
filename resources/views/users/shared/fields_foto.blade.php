@@ -20,7 +20,7 @@
     @endif
 @endif
 @if (($allowDelete ?? false) && $user->photo_url)
-    @if ($user)
+    @if ((Auth::user()->user_type ?? '') == 'A')
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal"
             data-action="{{ route('users.foto.destroy', ['user' => $user]) }}"
             data-msgLine2="Do you really want to remove the photo <strong>{{ $user->name }}</strong>?">

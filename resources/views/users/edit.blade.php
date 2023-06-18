@@ -46,10 +46,10 @@
         </div>
     </form>
     @include('shared.confirmationDialog', [
-        'title' => 'Apagar fotografia',
-        'msgLine1' => 'As alterações efetuadas aos dados do user vão ser perdidas!',
-        'msgLine2' => 'Clique no botão "Apagar" para confirmar a operação.',
-        'confirmationButton' => 'Apagar fotografia',
+        'title' => 'Remove Photo',
+        'msgLine1' => 'All the data that was changed will be lost!',
+        'msgLine2' => 'Press the button "Remove Photo" to confirm the operation',
+        'confirmationButton' => 'Remove Photo',
         'formAction' => route('users.foto.destroy', ['user' => $user]),
         'formMethod' => 'DELETE',
     ])

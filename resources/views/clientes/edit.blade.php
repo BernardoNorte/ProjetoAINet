@@ -35,9 +35,9 @@
                     @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
                 @endif
                 @if ((Auth::user()->user_type ?? '') == 'A')
-                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => true])
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => true,'readonlyData' => true])
                 @else 
-                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => false])
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => false, 'readonlyData' => false])
                 @endif
                 <div class="my-4 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary" name="ok" form="form_cliente">Save</button>
@@ -64,10 +64,10 @@
         </div>
     </form>
     @include('shared.confirmationDialog', [
-        'title' => 'Apagar fotografia',
-        'msgLine1' => 'As alterações efetuadas aos dados do cliente vão ser perdidas!',
-        'msgLine2' => 'Clique no botão "Apagar" para confirmar a operação.',
-        'confirmationButton' => 'Apagar fotografia',
+        'title' => 'Remove Photo',
+        'msgLine1' => 'All the data that was changed will be lost!',
+        'msgLine2' => 'Press the button "Remove Photo" to confirm the operation',
+        'confirmationButton' => 'Remove Photo', 
         'formAction' => route('clientes.foto.destroy', ['cliente' => $cliente->user->cliente]),
         'formMethod' => 'DELETE',
     ])

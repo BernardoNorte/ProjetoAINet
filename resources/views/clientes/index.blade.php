@@ -28,13 +28,14 @@
         </div>
     </form>
     @include('clientes.shared.table', [
-        'clientes' => $clientes,
-        'showContatos' => true,
-        'showDetail' => true,
-        'showPhoto' => true,
-        'showID' => false,
-        'showRemove' => true,
-    ])
+            'clientes' => $clientes,
+            'showContatos' => true,
+            'showDetail' => true,
+            'showPhoto' => true,
+            'showID' => false,
+            'showRemove' => true,
+        ])
+
     <div>
         <div>
             {{ $clientes->links() }}
