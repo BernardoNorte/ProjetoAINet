@@ -19,7 +19,6 @@ class ClienteController extends Controller
 {
     public function index(Request $request): View
     {
-        $this->authorize('administrar');
         $filterByNome = $request->nome ?? '';
         $clienteQuery = Cliente::query();
         if ($filterByNome !== ''){
@@ -32,7 +31,6 @@ class ClienteController extends Controller
 
     public function edit(Cliente $cliente): View
     {
-
         return view('clientes.edit')->withCliente($cliente);
     }
 
@@ -89,7 +87,6 @@ class ClienteController extends Controller
 
     public function destroy(Cliente $cliente): RedirectResponse
     {
-        $this->authorize('administrar');
         try {
             $user = $cliente->user;
                 DB::transaction(function () use ($cliente, $user) {
@@ -113,6 +110,11 @@ class ClienteController extends Controller
         return back()
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', $alertType);
+    }
+
+    public function __construct()
+    {
+        $this->authorizeResource(Cliente::class, 'cliente');
     }
 
 }

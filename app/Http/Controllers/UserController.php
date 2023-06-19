@@ -138,4 +138,9 @@ class UserController extends Controller
             ->with('alert-msg', 'user Photo "' . $user->name . '"was removed!')
             ->with('alert-type', ' Success');
     }
+
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
 }
