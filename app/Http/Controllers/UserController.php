@@ -37,6 +37,34 @@ class UserController extends Controller
         return view('users.create')->withUser($newUser);
     }
 
+    public function store(UserRequest $request): RedirectResponse
+    {
+        $formData = $request->validated();
+        $user = DB::transaction(function () use ($formData, $request){
+            $newUser = new User();
+            $newUser->name = $formData['name'];
+            $newUser->email = $formData['email'];
+            $newUser->blocked = $formData['blocked'];
+            $newUser->user_type = $formData['user_type'];
+            $newUser->password = Hash::make($formData['password_inicial']);
+            $newUser->save();
+            if ($request->hasFile('file_foto')) {
+                $path = $request->file_foto->store('public/photos');
+                $newUser->photo_url = basename($path);
+                $newUser->save();
+            }
+            return $newUser;
+        });
+        $url = route('users.show', ['user' => $user]);
+        $htmlMessage = "User <a href='$url'>#{$user->id}</a>
+                        <strong>\"{$user->name}\"</strong> was created with success!";
+        return redirect()->route('users.index')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+
+
+    }
+
     public function show(User $user): View
     {
         return view('users.show')->withUser($user);
@@ -61,7 +89,7 @@ class UserController extends Controller
                 if ($user->photo_url){
                     Storage::delete('public/photos/' . $user->photo_url);
                 }
-                $path = $request->photo_url->store('public/photos');
+                $path = $request->file_foto->store('public/photos');
                 $user->photo_url = basename($path);
                 $user->save();
             }
@@ -75,10 +103,27 @@ class UserController extends Controller
             ->with('alert-type', 'success');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
-        User::create($request->all());
-        return redirect()->route('users.index');
+        try {
+                if ($user->photo_url) {
+                    Storage::delete('public/fotos/' . $user->photo_url);
+                }
+                $user->delete();
+                $htmlMessage = "User #{$user->id}
+                        <strong>\"{$user->name}\"</strong> foi apagado com sucesso!";
+                return redirect()->route('users.index')
+                    ->with('alert-msg', $htmlMessage)
+                    ->with('alert-type', 'success');
+        } catch (\Exception $error) {
+            $url = route('users.show', ['user' => $user]);
+            $htmlMessage = "Não foi possível apagar o user <a href='$url'>#{$user->id}</a>
+                        <strong>\"{$user->name}\"</strong> porque ocorreu um erro!";
+            $alertType = 'danger';
+        }
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
     }
 
     public function destroy_foto(User $user): RedirectResponse
@@ -92,5 +137,10 @@ class UserController extends Controller
         return redirect()->route('users.edit', ['user' => $user])
             ->with('alert-msg', 'user Photo "' . $user->name . '"was removed!')
             ->with('alert-type', ' Success');
+    }
+
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
     }
 }

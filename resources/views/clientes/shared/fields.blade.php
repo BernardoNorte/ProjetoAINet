@@ -2,6 +2,7 @@
     $disabledStr = $readonlyData ?? false ? 'disabled' : '';
 @endphp
 
+@if ($showID)
 <div class="mb-3 form-floating">
         <input type="text" class="form-control @error('numero') is-invalid @enderror" name="numero" id="inputNumero"
             {{ $disabledStr }} value="{{ old('id', $cliente->id) }}">
@@ -12,6 +13,7 @@
             </div>
         @enderror
 </div>
+@endif
 <div class="mb-3 form-floating">
         <input type="text" class="form-control @error('nif') is-invalid @enderror" name="nif" id="inputNif"
             {{ $disabledStr }} value="{{ old('nif', $cliente->nif) }}">
@@ -52,4 +54,22 @@
             </div>
         @enderror
 </div>
+
+@if ((Auth::user()->user_type ?? '') == 'A')
+    @if ($allowBlocked ?? true)
+        <div class="mb-3">
+            <div class="form-check form-switch" {{ $disabledStr }}>
+                <input type="hidden" name="blocked" value="0">
+                <input type="checkbox" class="form-check-input @error('blocked') is-invalid @enderror" name="blocked"
+                    id="inputOpcional" {{ old('blocked', $cliente->user->blocked) ? 'checked' : '' }} value="1">
+                <label for="inputOpcional" class="form-check-label">Blocked</label>
+                @error('blocked')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+        </div>
+    @endif
+@endif
 

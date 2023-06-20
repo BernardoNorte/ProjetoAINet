@@ -10,9 +10,6 @@
 @endsection
 
 @section('main')
-    <p>
-        <a class="btn btn-success" href="{{ route('clientes.create') }}"><i class="fas fa-plus"></i> &nbsp;Create new Client</a>
-    </p>
     <form method="GET" action="{{ route('clientes.index') }}">
         <div class="d-flex justify-content-between">
             <div class="flex-grow-1 pe-2">
@@ -31,11 +28,14 @@
         </div>
     </form>
     @include('clientes.shared.table', [
-        'clientes' => $clientes,
-        'showContatos' => true,
-        'showDetail' => true,
-        'showPhoto' => true,
-    ])
+            'clientes' => $clientes,
+            'showContatos' => true,
+            'showDetail' => true,
+            'showPhoto' => true,
+            'showID' => false,
+            'showRemove' => true,
+        ])
+
     <div>
         <div>
             {{ $clientes->links() }}

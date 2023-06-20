@@ -11,6 +11,9 @@
             @if ($showDetail)
                 <th class="button-icon-col"></th>
             @endif
+            @if ($showRemove)
+                <th class="button-icon-col"></th>
+            @endif
             
         </tr>
     </thead>
@@ -26,13 +29,20 @@
                 <td>{{$cliente->nif}}</td>
                 <td>{{$cliente->address}}</td>
                 <td>{{$cliente->user->email}}</td>
-                <td></td>
                 @if ($showDetail)
                     <td class="button-icon-col"><a class="btn btn-secondary"
                             href="{{ route('clientes.show', ['cliente' => $cliente]) }}">
                             <i class="fas fa-eye"></i></a></td>
                 @endif
-                
+                @if ($showRemove)
+                    <td class="button-icon-col">
+                            <button type="button" name="delete" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#confirmationModal"
+                                data-msgLine1="Do you really want to remove <strong>&quot;{{ $cliente->user->name }}&quot;</strong>?"
+                                data-action="{{ route('clientes.destroy', ['cliente' => $cliente]) }}">
+                                <i class="fas fa-trash"></i></button>
+                    </td>
+                @endif
             </tr>
         @endforeach
     </tbody>

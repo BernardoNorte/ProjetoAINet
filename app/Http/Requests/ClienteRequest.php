@@ -25,16 +25,25 @@ class ClienteRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => 'required',
-            'id' => 'required',
+            //'name' => 'required',
+            'name' => [
+                'required',
+                'unique',
+                Rule::unique('users', 'name')->ignore($this->user_id),
+            ],
+            //'email' => 'required',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user_id),
+            ],
             'nif' => 'nullable|digits:9',
             'address' => 'nullable',
             'default_payment_type' => 'nullable|in:MC,PAYPAL,VISA',
             'default_payment_ref' => 'nullable',
-            'photo_url' => 'sometimes|image|max:8192',
+            'file_foto' => 'nullable|image|max:8192',
             'password_inicial' => 'sometimes|required',
-            'bloqueado' => 'required|boolean'
+            'blocked' => 'required|boolean',
         ];
     }
 
@@ -42,17 +51,14 @@ class ClienteRequest extends FormRequest
     {
         return [
             'name.required' =>  'O nome é obrigatório',
-            'id.required' => 'O id é obrigatório',
-            'id.unique' => 'O id é único',
             'email.required' => 'O email é obrigatório',
             'email.email' =>    'O formato do email é inválido',
             'email.unique' =>   'O email tem que ser único',
             'nif.integer' =>    'O nif tem que ser inteiro',
             'nif.unique' => 'O nif tem que ser unico',
             'default_payment_type.in' => 'O tipo de pagamento tem de ser MC, Paypal, Visa',
-            'default_payment_ref.char' => 'A referência de pagamento tem de ser com caracteres',
-            'photo_url.image' => 'O ficheiro com a foto não é uma imagem',
-            'photo_url.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
+            'file_foto.image' => 'O ficheiro com a foto não é uma imagem',
+            'file_foto.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
             'password_inicial.required' => 'A password inicial é obrigatória',
         ];
     }

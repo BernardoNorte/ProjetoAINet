@@ -10,9 +10,8 @@
 // Template
 @import 'sb-admin';
 
-table,
-th,
-td{
+table th.button-icon-col,
+table td.button-icon-col{
     border: 1px, solid black;
     border-collapse: collapse;
 }

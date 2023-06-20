@@ -28,6 +28,7 @@
                         @if ((Auth::user()->user_type ?? '') == 'E' || (Auth::user()->user_type ?? '') == 'A')
                             <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'encomendas.index' ? 'active' : ''}}" href="{{ route('encomendas.index') }}">Orders</a></li>
                         @endif
+                        @if ((Auth::user()->user_type ?? '') == 'A' || (Auth::user()->user_type ?? '') == 'C')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -37,6 +38,7 @@
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                             </ul>
                         </li>
+                        @endif
                         @if ((Auth::user()->user_type ?? '') == 'A')
                             <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'clientes.index' ? 'active' : ''}}" href="{{ route('clientes.index') }}">Clients</a></li>
                         @endif

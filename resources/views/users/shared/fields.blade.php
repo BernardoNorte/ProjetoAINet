@@ -23,23 +23,27 @@
         </div>
     @enderror
 </div>
-@if ((Auth::user()->user_type ?? '') == 'A')
-    <div class="mb-3 form-floating">
-        <input type="text" class="form-control @error('blocked') is-invalid @enderror" name="blocked" id="inputBlocked"
-            {{ $disabledStr }} value="{{ old('blocked', $user->blocked) }}">
-        <label for="inputBlocked" class="form-label">Blocked</label>
-        @error('blocked')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
+@if ($showBlocked)
+    <div class="mb-3">
+        <div class="form-check form-switch" {{ $disabledStr }}>
+            <input type="hidden" name="blocked" value="0">
+            <input type="checkbox" class="form-check-input @error('blocked') is-invalid @enderror" name="blocked"
+                id="inputOpcional" {{ $disabledStr }} {{ old('blocked', $user->blocked) ? 'checked' : '' }} value="1">
+            <label for="inputOpcional" class="form-check-label">Blocked</label>
+            @error('blocked')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
     </div>
+@endif
+@if ($showUserType)
     <div class="mb-3 form-floating">
-        <select class="form-select @error('user_type') is-invalid @enderror" name="user_type" id="inputUserType"
-            {{ $disabledStr }}>
-            <option {{ old('user_type', $user->user_type) == 'A' ? 'selected' : '' }} value="A">Admin
+        <select class="form-select @error('user_type') is-invalid @enderror" name="user_type" id="inputUserType">
+            <option {{ $disabledStr }} {{ old('user_type', $user->user_type) == 'A' ? 'selected' : '' }} value="A">Admin
             </option>
-            <option {{ old('user_type', $user->user_type) == 'E' ? 'selected' : '' }} value="E">Employee
+            <option {{ $disabledStr }} {{ old('user_type', $user->user_type) == 'E' ? 'selected' : '' }} value="E">Employee
             </option>
         </select>
         <label for="inputUserType" class="form-label">User Type</label>

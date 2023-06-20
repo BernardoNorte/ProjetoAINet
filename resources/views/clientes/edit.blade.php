@@ -24,33 +24,50 @@
     @endsection
 
     @section('main')
-    <form method="POST" action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
+    <form id="form_cliente" method="POST" action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
             <div class="flex-grow-1 pe-2">
-                @include('users.shared.fields', ['user' => $cliente->user, 'readonlyData' => false])
-                @include('clientes.shared.fields', ['cliente' => $cliente, 'readonlyData' => false])
+                @if ((Auth::user()->user_type ?? '') == 'A')
+                    @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => true])
+                @else
+                    @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
+                @endif
+                @if ((Auth::user()->user_type ?? '') == 'A')
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => true,'readonlyData' => true])
+                @else 
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => false, 'readonlyData' => false])
+                @endif
                 <div class="my-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary" name="ok">Save</button>
+                    <button type="submit" class="btn btn-primary" name="ok" form="form_cliente">Save</button>
                     <a href="{{ route('clientes.show', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">Cancel</a>
                 </div>
             </div>
                 <div class="ps-2 mt-5 mt-md-1 d-flex mx-auto flex-column align-items-center justify-content-between"
                     style="min-width:260px; max-width:260px;">
-                    @include('users.shared.fields_foto', [
-                        'user' => $cliente->user,
-                        'allowUpload' => true,
-                        'allowDelete' => true,
-                    ])
-                </div>
+                    @if ((Auth::user()->user_type ?? '') == 'A')
+                        @include('users.shared.fields_foto', [
+                            'user' => $cliente->user,
+                            'allowUpload' => false,
+                            'allowDelete' => false,
+                            'allowBlocked' => true,
+                        ])
+                    @else 
+                        @include('users.shared.fields_foto', [
+                            'user' => $cliente->user,
+                            'allowUpload' => true,
+                            'allowDelete' => true,
+                        ])
+                    @endif
+            </div>
         </div>
     </form>
     @include('shared.confirmationDialog', [
-        'title' => 'Apagar fotografia',
-        'msgLine1' => 'As alterações efetuadas aos dados do cliente vão ser perdidas!',
-        'msgLine2' => 'Clique no botão "Apagar" para confirmar a operação.',
-        'confirmationButton' => 'Apagar fotografia',
+        'title' => 'Remove Photo',
+        'msgLine1' => 'All the data that was changed will be lost!',
+        'msgLine2' => 'Press the button "Remove Photo" to confirm the operation',
+        'confirmationButton' => 'Remove Photo', 
         'formAction' => route('clientes.foto.destroy', ['cliente' => $cliente->user->cliente]),
         'formMethod' => 'DELETE',
     ])
