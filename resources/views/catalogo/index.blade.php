@@ -51,7 +51,7 @@
                 </span>
             </div>
             @cannot('GateAdministrador')
-            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">Comprar</a></div>
+            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">Add to Cart</a></div>
             @endcannot
 
         </div>

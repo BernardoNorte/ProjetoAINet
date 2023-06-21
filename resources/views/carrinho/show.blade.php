@@ -1,37 +1,58 @@
 @extends('template.layout')
 
-@section('titulo', 'Carrinho')
+@section('content')
 
-@section('subtitulo')
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">Private Space</li>
-        <li class="breadcrumb-item active">Cart</li>
-    </ol>
+
+<div class="row">
+<form action="{{ route('carrinho.destroy') }}" method="POST">
+    @csrf
+    @method("DELETE")
+    <input type="submit" class="btn btn-danger" value="Apagar carrinho">
+</form>
+
+</div>
+<br>
+@endif
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>Tshirt ID</th>
+            <th>Photo</th>
+            <th>Color</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Price per</th>
+            <th>Sub Total</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+@foreach ($carrinho as $carrinhoLinha)
+
+<tr>
+
+    <td>{{$carrinhoLinha['idEstampa']}}</td>
+    <td><img src="{{$carrinhoLinha['imagem_url'] ? asset('storage/estampas/' . $carrinhoLinha['imagem_url']) : asset('img/default_img.png') }}" alt="Foto da Estampa"  style="width:80px;height:80px"></td>
+    {{-- <td>{{$carrinhoLinha['imagem_url']}}</td> --}}
+    
+
+    <td>{{$carrinhoLinha['tamanho']}}</td>
+    <td>{{$carrinhoLinha['quantidade']}}</td>
+    <td>{{$carrinhoLinha['preco_un_catalogo']}}</td>
+    <td>{{$carrinhoLinha['subtotal']}}</td>
+
+<td>
+</td>
+</tr>
+@endforeach
+
+</tbody>
+</table>
 @endsection
 
-@section('main')
-    <div>
-        <h3>Tshirts in Cart</h3>
-    </div>
-    @if ($cart)
-        @include('disciplinas.shared.table', [
-            'disciplinas' => $cart,
-            'showCurso' => true,
-            'showDetail' => true,
-            'showEdit' => false,
-            'showDelete' => false,
-            'showRemoveCart' => true,
-        ])
-        <div class="my-4 d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary" name="ok" form="formStore">Add Cart</button>
-            <button type="submit" class="btn btn-danger ms-3" name="clear" form="formClear">Clear Cart</button>
-        </div>
-        <form id="formStore" method="POST" action="{{ route('cart.store') }}" class="d-none">
-            @csrf
-        </form>
-        <form id="formClear" method="POST" action="{{ route('cart.destroy') }}" class="d-none">
-            @csrf
-            @method('DELETE')
-        </form>
-    @endif
-@endsection

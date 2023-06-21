@@ -16,21 +16,21 @@
                         <a href="#">{{ $cor->name }}</a>
                     @endforeach
                     </div>
-                  </div>
                 </div>
+            </div>
                 <h1>{{ $item->name }}</h1>
                 <img src="{{ $item->image_url }}" alt="{{ $item->name }}" width="200">
                 <p>{{ $item->description }}</p>
                 <p>Preço: {{session('unit_price_catalog') . " €"}}</p>
                 <!-- Adicionar ao Carrinho -->
-                <form  method="POST">
-                    @csrf
-                    <input type="hidden" name="idEstampa" value="{{ $item->id }}">
-                    <input type="hidden" name="image_url" value="{{ $item->image_url }}">
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-outline-dark mt-auto">Add to Cart</button>
+                <input type="hidden" name="idEstampa" value="{{ $item->id }}">
+                <input type="hidden" name="image_url" value="{{ $item->image_url }}">
+                <div class="text-center">
+                    <form method="POST" action="{{ route('cart.add', ['estampa' => $estampa]) }}">
+                        @csrf 
+                        <button type="submit" name="addToCart" class="btn btn-outline-dark mt-auto">Add to Cart</button>
+                    </form>
                     </div>
-                </form>
             </div>
         </div>
     </div>

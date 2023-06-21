@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Estampa;
 use App\Models\Cliente;
 use App\Models\User;
@@ -36,11 +34,24 @@ class CarrinhoController extends Controller
                 $alertType = 'warning';
                 $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";
             }else{
-                $clienteID = $request->user()->cliente->id;
+                /*$clienteID = $request->user()->cliente->id;
                 $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
-                $htmlMessage = "Total de estampas -> $totalEstampas";
-            }
+                $htmlMessage = "Total de estampas -> $totalEstampas";*/
+                $cart = session('cart', []);
+                $cart[$estampa->id] = $estampa;
+                $request->session()->put('cart', $cart);
+                $alertType = 'success';
+                $url = route('estampas.show', ['estampa' => $estampa]);
+                $htmlMessage = "Tshirt <a href='$url'>#{$estampa->id}</a><strong>\"{$estampa->name}\"</strong> was added to the cart!";
         }
+        } catch (\Exception $error){
+            $url = route('estampas.show', ['estampa' => $estampa]);
+            $htmlMessage = "It was not possible to add the tshirt <a href='$url'>#{$estampa->id}</a><strong>\"{$estampa->name}\"</strong> to the cart!";
+            $alertType = 'danger';
+        }
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
     }
 
     /*public function index(Request $request)

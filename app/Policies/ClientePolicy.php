@@ -45,7 +45,7 @@ class ClientePolicy
      */
     public function update(User $user, Cliente $cliente): bool
     {
-        if ($user->user_type == 'A' || $user->user_type == 'C')
+        if ($user->user_type == 'A' || $cliente->user->user_type == 'C')
         {
             return true;
         }

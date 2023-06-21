@@ -44,16 +44,16 @@ class ClienteController extends Controller
             $cliente->default_payment_ref = $formData['default_payment_ref'];
             $cliente->save();
             $user = $cliente->user;
+            $user->user_type = 'C';
             $user->name = $formData['name'];
             $user->email = $formData['email'];
             $user->blocked = $formData['blocked'];
-            $user->cliente_type = 'C';
             $user->save();
             if ($request->hasFile('file_foto')) {
-                if ($cliente->user->photo_url){
-                    Storage::delete('public/photos/' . $cliente->user->photo_url);
+                if ($user->photo_url){
+                    Storage::delete('public/photos/' . $user->photo_url);
                 }
-                $path = $request->photo_url->store('public/photos');
+                $path = $request->file_foto->store('public/photos');
                 $cliente->user->photo_url = basename($path);
                 $cliente->save();
             }
@@ -69,14 +69,14 @@ class ClienteController extends Controller
 
     public function destroy_foto(Cliente $cliente): RedirectResponse
     {
-        if ($cliente->cliente->photo_url){
-            Storage::delete('public/photos/' . $cliente->cliente->photo_url);
-            $cliente->cliente->photo_url = null;
-            $cliente->cliente->save();
+        if ($cliente->user->photo_url){
+            Storage::delete('public/photos/' . $cliente->user->photo_url);
+            $cliente->user->photo_url = null;
+            $cliente->user->save();
         }
 
         return redirect()->route('clientes.edit', ['cliente' => $cliente])
-            ->with('alert-msg', 'Cliente Photo "' . $cliente->cliente->name . '"was removed!')
+            ->with('alert-msg', 'Client Photo "' . $cliente->user->name . '"was removed!')
             ->with('alert-type', ' Success');
     }
 
@@ -104,7 +104,7 @@ class ClienteController extends Controller
         } catch (\Exception $error) {
             $url = route('clientes.show', ['cliente' => $cliente]);
             $htmlMessage = "Não foi possível apagar o cliente <a href='$url'>#{$cliente->id}</a>
-                        <strong>\"{$cliente->name}\"</strong> porque ocorreu um erro!";
+                        <strong>\"{$cliente->user->name}\"</strong> porque ocorreu um erro!";
             $alertType = 'danger';
         }
         return back()

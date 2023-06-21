@@ -23,19 +23,20 @@
         </ol>
     @endsection
 
-    @section('main')
-    <form id="form_cliente" method="POST" action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
+@section('main')
+    <form id="form_cliente" novalidate class="needs-validation" method="POST"
+        action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
             <div class="flex-grow-1 pe-2">
                 @if ((Auth::user()->user_type ?? '') == 'A')
-                    @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => true])
+                    @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
                 @else
                     @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
                 @endif
                 @if ((Auth::user()->user_type ?? '') == 'A')
-                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => true,'readonlyData' => true])
+                    @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => true,'readonlyData' => false])
                 @else 
                     @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'allowRemove' => false, 'readonlyData' => false])
                 @endif

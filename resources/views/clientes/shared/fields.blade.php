@@ -58,9 +58,9 @@
 @if ((Auth::user()->user_type ?? '') == 'A')
     @if ($allowBlocked ?? true)
         <div class="mb-3">
-            <div class="form-check form-switch" {{ $disabledStr }}>
-                <input type="hidden" name="blocked" value="0">
-                <input type="checkbox" class="form-check-input @error('blocked') is-invalid @enderror" name="blocked"
+            <div class="form-check form-switch" >
+                <input type="hidden" name="blocked" value="0" {{ $disabledStr }}>
+                <input type="checkbox" {{ $disabledStr }} class="form-check-input @error('blocked') is-invalid @enderror" name="blocked"
                     id="inputOpcional" {{ old('blocked', $cliente->user->blocked) ? 'checked' : '' }} value="1">
                 <label for="inputOpcional" class="form-check-label">Blocked</label>
                 @error('blocked')

@@ -16,13 +16,15 @@
                 @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => true])
                 @include('clientes.shared.fields', ['cliente' => $cliente, 'showID' => false, 'readonlyData' => true])
                 <div class="my-1 d-flex justify-content-end">
-                    <form method="POST" action="{{ route('clientes.destroy', ['cliente' => $cliente]) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" name="delete" class="btn btn-danger">
-                            Delete client
-                        </button>
-                    </form>
+                    @if ((Auth::user()->user_type ?? '') == 'A')
+                        <form method="POST" action="{{ route('clientes.destroy', ['cliente' => $cliente]) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" name="delete" class="btn btn-danger">
+                                Delete client
+                            </button>
+                        </form>
+                    @endif
                     <a href="{{ route('clientes.edit', ['cliente' => $cliente]) }}" class="btn btn-secondary ms-3">
                         Change client
                     </a>
