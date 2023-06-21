@@ -86,7 +86,6 @@
                         @if ((Auth::user()->user_type ?? '') == 'C')
                             <li><a class="dropdown-item"
                                     href="{{ route('clientes.show', ['cliente' => Auth::user()->cliente]) }}">Profile</a></li>
-                        
                         @endif
                         <li><a class="dropdown-item" href="{{ route('password.change.show') }}">Change Password</a></li>
                         <li>
@@ -105,18 +104,20 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
-                <button class="btn btn-outline-dark" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                </button>
-            </form>
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-3 me-lg-0" id="sidebarToggle" href="#"><i
-                class="fas fa-bars"></i></button>
+            @endguest
+            @if ((Auth::user()->user_type ?? '') != 'A' && (Auth::user()->user_type ?? '') != 'E')
+                <form class="d-flex">
+                    <button class="btn btn-outline-dark" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </button>
+                </form>
+                <button class="btn btn-link btn-sm order-1 order-lg-0 me-3 me-lg-0" id="sidebarToggle" href="#"><i
+                    class="fas fa-bars"></i></button>
+                    </div>
                 </div>
-            </div>
-        @endguest
+            @endif
         </nav>
         
         <!-- Footer-->
