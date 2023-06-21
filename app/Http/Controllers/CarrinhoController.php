@@ -10,7 +10,10 @@ use App\Models\User;
 use App\Models\Encomenda;
 use Illuminate\Support\Facades\Auth;
 use Mail;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 use App\Http\Requests\EncomendaPost;
 use App\Http\Requests\TshirtPost;
@@ -19,14 +22,34 @@ use PDF;
 
 class CarrinhoController extends Controller
 {
+    public function show(): View
+    {
+        $cart = session('cart', []);
+        return view('cart.show', compact('cart'));
+    }
 
+    public function addToCart(Request $request, Estampa $estampa): RedirectResponse
+    {
+        try {
+            $userType = $request->user()->user_type ?? '';
+            if ($userType == 'A' || $userType == 'E'){
+                $alertType = 'warning';
+                $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";
+            }else{
+                $clienteID = $request->user()->cliente->id;
+                $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
+                $htmlMessage = "Total de estampas -> $totalEstampas";
+            }
+        }
+    }
 
-    public function index(Request $request)
+    /*public function index(Request $request)
     {
         return view('carrinho.index')
             ->with('pageTitle', 'Carrinho de compras')
             ->with('carrinho', session('carrinho') ?? []);
     }
+
 
 
 
@@ -173,5 +196,5 @@ class CarrinhoController extends Controller
         return redirect('/')
             ->with('alert-msg', 'Encomenda foi passada para o estado pendente !')
             ->with('alert-type', 'success');
-    }
+    }*/
 }
