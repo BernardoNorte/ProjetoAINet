@@ -26,7 +26,7 @@
                 <input type="hidden" name="idEstampa" value="{{ $item->id }}">
                 <input type="hidden" name="image_url" value="{{ $item->image_url }}">
                 <div class="text-center">
-                    <form method="POST" action="{{ route('cart.add', ['estampa' => $estampa]) }}">
+                    <form method="POST" action="{{ route('cart.add', ['estampa' => $item]) }}">
                         @csrf 
                         <button type="submit" name="addToCart" class="btn btn-outline-dark mt-auto">Add to Cart</button>
                     </form>

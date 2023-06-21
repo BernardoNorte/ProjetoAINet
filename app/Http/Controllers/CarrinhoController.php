@@ -28,30 +28,75 @@ class CarrinhoController extends Controller
 
     public function addToCart(Request $request, Estampa $estampa): RedirectResponse
     {
-        try {
-            $userType = $request->user()->user_type ?? '';
-            if ($userType == 'A' || $userType == 'E'){
-                $alertType = 'warning';
-                $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";
-            }else{
-                /*$clienteID = $request->user()->cliente->id;
-                $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
-                $htmlMessage = "Total de estampas -> $totalEstampas";*/
-                $cart = session('cart', []);
-                $cart[$estampa->id] = $estampa;
-                $request->session()->put('cart', $cart);
-                $alertType = 'success';
-                $url = route('estampas.show', ['estampa' => $estampa]);
-                $htmlMessage = "Tshirt <a href='$url'>#{$estampa->id}</a><strong>\"{$estampa->name}\"</strong> was added to the cart!";
+        $userType = $request->user()->user_type ?? '';
+        if ($userType == 'A' || $userType == 'E'){
+            $alertType = 'warning';
+            $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";
+        }else{
+            /*$clienteID = $request->user()->cliente->id;
+            $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
+            $htmlMessage = "Total de estampas -> $totalEstampas";*/
+            $cart = session('cart', []);
+            $qtd = ($cart[$estampa->id]['qtd'] ?? 0) + 1;
+            $cart[$estampa->id] = [
+                'id' => $estampa->id,
+                'qtd' => $qtd,
+                'name' => $estampa->name,
+                'image' => $estampa->image_url,
+            ];
+            $request->session()->put('cart', $cart);
+            $alertType = 'success';
+            //$url = route('estampas.show', ['estampa' => $estampa]);
+            //$htmlMessage = "Tshirt <a href='$url'>#{$estampa->id}</a><strong>\"{$estampa->name}\"</strong> was added to the cart!";
         }
-        } catch (\Exception $error){
-            $url = route('estampas.show', ['estampa' => $estampa]);
-            $htmlMessage = "It was not possible to add the tshirt <a href='$url'>#{$estampa->id}</a><strong>\"{$estampa->name}\"</strong> to the cart!";
-            $alertType = 'danger';
+        
+        return back()
+            //->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
+    }
+
+    public function updateCart(Request $request, Estampa $estampa)
+    {
+        $cart = $request->session()->get('cart', []);
+        $qtd = $cart[$estampa->id]['qtd'] ?? 0;
+        $qtd += $request->quantidade;
+        if ($request->quantidade < 0){
+            $msg = 'Removed  ' . -$request->quantidade . ' t-shirts "' . $estampa->name . '"';
+        } else if ($request->quantidade > 0){
+            $msg = 'Added ' . $request->quantidade . ' t-shirts "' . $estampa->name . '"';
+        }
+
+        if($qtd <= 0)
+        {
+            unset($cart[$estampa->id]);
+            $msg = 'Removed all t-shirts "' . $estampa->name . '"';
+        } else {
+            $cart[$estampa->id] = [
+                'id' => $estampa->id,
+                'qtd' => $qtd,
+                'name' => $estampa->name,
+                'image' => $estampa->image_url,
+            ];
+        }
+        $request->session()->put('cart', $cart);
+        return back()
+            ->with('alert-msg', $msg)
+            ->with('alert-type', 'success');
+    }
+
+    public function destroyCartTshirt(Request $request, Estampa $estampa)
+    {
+        $cart = $request->session()->get('cart', []);
+        if (array_key_exists($estampa->id, $cart)){
+            unset($cart[$estampa->id]);
+            $request->session()->put('cart', $cart);
+            return back()
+                ->with('alert-msg', 'Removed all t-shirts related to "'. $estampa->name . '"')
+                ->with('alert-type', 'success');
         }
         return back()
-            ->with('alert-msg', $htmlMessage)
-            ->with('alert-type', $alertType);
+            ->with('alert-msg', 'T-shirt "' . $estampa->name . '" had no quantity')
+            ->with('alert-type', 'warning');
     }
 
     /*public function index(Request $request)
