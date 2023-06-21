@@ -9,7 +9,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\TshirtController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 
 Auth::routes();
@@ -57,6 +57,12 @@ Route::delete('users/{user}/photo', [UserController::class, 'destroy_foto'])->na
 
 
 Route::get('tshirts', [TshirtController::class, 'index'])->name('tshirts.index');
+
+Route::post('cart/{estampa}', [CarrinhoController::class, 'addToCart'])->name('cart.add');
+Route::delete('cart/{estampa}', [CarrinhoController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('cart', [CarrinhoController::class, 'show'])->name('cart.show');
+Route::post('cart', [CarrinhoController::class, 'store'])->name('cart.store');
+Route::delete('cart', [CarrinhoController::class, 'destroy'])->name('cart.destroy');
 
 
 //Route::view('/', 'catalogo')->name('catalogo');
