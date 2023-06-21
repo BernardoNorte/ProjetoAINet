@@ -44,6 +44,8 @@ Route::resource('clientes', ClienteController::class);//->middleware('verified')
 Route::resource('catalogo', CatalogoController::class);
 
 Route::get('/catalogo', [App\Http\Controllers\CatalogoController::class, 'index'])->name('catalogo.index');
+Route::get('/catalogo/search', 'CatalogoController@search')->name('catalogo.search');
+Route::get('/catalogo/{id}', 'CatalogoController@show')->name('catalogo.show');
 
 Route::get('/password/change', [ChangePasswordController::class, 'show'])->name('password.change.show');
 Route::post('/password/change', [ChangePasswordController::class, 'store'])->name('password.change.store');
