@@ -62,12 +62,5 @@ class LoginController extends Controller
             $this->credentials($request), $request->filled('remember')
         );
     }
-
-
-    /* protected function attemptLogin(Request $request)
-    {
-        return Auth::attempt(['email' => $request->email, 'password' => $request->password, 'blocked' => 0 ]);
-    }  */
-
     
 }
