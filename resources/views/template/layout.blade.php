@@ -43,14 +43,6 @@
                         @if ((Auth::user()->user_type ?? '') == 'A')
                             <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : ''}}" href="{{ route('users.index') }}">Employees</a></li>
                         @endif
-                        @if(Request::is('catalogo'))
-                            <li class="nav-item ml-auto">
-                                <form class="form-inline my-2 my-lg-0" action="{{ route('catalogo.search') }}" method="GET">
-                                    <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search print" aria-label="Search">
-                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                                </form>
-                            </li>
-                        @endif
                     </ul>
         @guest
             <ul class="navbar-nav ms-auto me-1 me-lg-3">

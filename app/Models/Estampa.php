@@ -9,11 +9,20 @@ class Estampa extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['id','cliente_id', 'categoria_id', 'nome','descricao', 'imagem_url', 'informacao_extra'];
+    protected $fillable = ['id','client_id', 'category_id', 'name','description', 'image_url', 'extra_info'];
 
     public function tshirts()
     {
         return $this->hasMany(Tshirt::class, 'estampa_id', 'id');
     }
 
+    public function id()
+    {
+        return $this->HasOne(Estampa::class,'id');
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'category_id');
+    }
 }
