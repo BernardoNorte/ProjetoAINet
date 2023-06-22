@@ -1,5 +1,5 @@
 @extends('template.layout')
-@section('titulo', 'Carrinho')
+@section('titulo', 'Cart')
 @section('subtitulo')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Private Space</li>
