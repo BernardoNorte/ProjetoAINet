@@ -19,18 +19,35 @@
                 </div>
             </div>
                 <h1>{{ $item->name }}</h1>
-                <img src="{{ $item->image_url }}" alt="{{ $item->name }}" width="200">
+                <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="{{ $item->name }}" width="200">
                 <p>{{ $item->description }}</p>
-                <p>Preço: {{session('unit_price_catalog') . " €"}}</p>
+                <p>Price: {{session('unit_price_catalog') . " €"}}</p>
                 <!-- Adicionar ao Carrinho -->
                 <input type="hidden" name="idEstampa" value="{{ $item->id }}">
                 <input type="hidden" name="image_url" value="{{ $item->image_url }}">
-                <div class="text-center">
+            <div class="form-group">
+                <div class="form-group">
+                    <div class="mb-3 form-floating">
+                        <label for="inputSize" class="form-label">Size</label>
+                            <select class="form-control" name="size" id="inputSize">
+                                <option >S</option>
+                                <option >M</option>
+                                <option >L</option>
+                                <option >XL</option>
+                            </select>
+                    </div>
+            </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Quantity</label>
+                    <input class="form-control" type="number" id="inputQuantidade" name="quantidade" min="1" max="99" value="1" required>
+                </div>
+            </div>
+            <div class="text-center">
                     <form method="POST" action="{{ route('cart.add', ['estampa' => $item]) }}">
                         @csrf 
                         <button type="submit" name="addToCart" class="btn btn-outline-dark mt-auto">Add to Cart</button>
                     </form>
-                    </div>
             </div>
         </div>
     </div>
