@@ -40,7 +40,7 @@
 
                 <div class="form-group">
                     <label for="exampleFormControlSelect2">Quantity</label>
-                    <input class="form-control" type="number" id="inputQuantidade" name="quantidade" min="1" max="99" value="1" required>
+                    <input class="form-control" type="number" id="inputQuantity" name="quantity" min="1" max="99" value="1" required>
                 </div>
             </div>
             <div class="text-center">

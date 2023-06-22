@@ -38,11 +38,15 @@ class CarrinhoController extends Controller
             $htmlMessage = "Total de estampas -> $totalEstampas";*/
             $cart = session('cart', []);
             $qtd = ($cart[$estampa->id]['qtd'] ?? 0) + 1;
+            $size = $request->input('size');
+            $quantity = $request->input('quantity');
             $cart[$estampa->id] = [
                 'id' => $estampa->id,
                 'qtd' => $qtd,
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
+                'size' => $size,
+                'color' => $request->input(),
             ];
             $request->session()->put('cart', $cart);
             $alertType = 'success';
@@ -97,6 +101,15 @@ class CarrinhoController extends Controller
         return back()
             ->with('alert-msg', 'T-shirt "' . $estampa->name . '" had no quantity')
             ->with('alert-type', 'warning');
+    }
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->session()->forget('cart');
+        $htmlMessage = "Flushed Cart!";
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
     }
 
     /*public function index(Request $request)

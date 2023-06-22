@@ -18,6 +18,9 @@
                 <th>Name</th>
                 <th>Photo</th>
                 <th>Quantity</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th>Sub Total</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -29,6 +32,9 @@
                     <td><img src="{{$row['image'] ? asset('storage/tshirt_images/' . $row['image']) : asset('img/default_img.png') }}" alt="Foto da Estampa"  style="width:80px;height:80px"></td>
                     {{-- <td>{{$row['image']}}</td> --}}
                     <td>{{ $row['qtd'] }} </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <form action="{{route('cart.update', $row['id'])}}" method="POST">
                             @csrf 
@@ -56,5 +62,9 @@
             @endforeach
         </tbody>
     </table>
+    <div class="my-4 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary" name="ok" form="formStore"> Confirm Cart</button>
+        <button type="submit" class="btn btn-danger ms-3" name="clear" form="formClear"> Clear Cart</button>
+    </div>
 @endsection
 
