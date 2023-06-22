@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Models\User;
-use App\Http\Controllers\Auth\Request;
+//use App\Http\Controllers\Auth\Request;
+use \Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,6 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-
     /**
      * Where to redirect users after login.
      *
@@ -43,5 +43,24 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'password', 'blocked');
+    }
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+
+
+    protected function attemptLogin(Request $request)
+    {
+        $request->merge(['blocked' => '0']);
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->filled('remember')
+        );
+    }
     
 }

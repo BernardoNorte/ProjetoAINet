@@ -23,23 +23,44 @@
                         <a href="#">{{ $cor->name }}</a>
                     @endforeach
                     </div>
-                  </div>
                 </div>
+            </div>
                 <h1>{{ $item->name }}</h1>
+<<<<<<< HEAD
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
                     <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." width="360px" height="420px"/>
                 </div>
+=======
+                <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="{{ $item->name }}" width="200">
+>>>>>>> a34e5d8539291f76744cc904b2d70a864a03a767
                 <p>{{ $item->description }}</p>
                 <p>Price: {{session('unit_price_catalog') . " €"}}</p>
                 <!-- Adicionar ao Carrinho -->
-                <form  method="POST">
-                    @csrf
-                    <input type="hidden" name="idEstampa" value="{{ $item->id }}">
-                    <input type="hidden" name="image_url" value="{{ $item->image_url }}">
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-outline-dark mt-auto">Add to Cart</button>
+                <input type="hidden" name="idEstampa" value="{{ $item->id }}">
+                <input type="hidden" name="image_url" value="{{ $item->image_url }}">
+            <div class="form-group">
+                <div class="form-group">
+                    <div class="mb-3 form-floating">
+                        <label for="inputSize" class="form-label">Size</label>
+                            <select class="form-control" name="size" id="inputSize">
+                                <option >S</option>
+                                <option >M</option>
+                                <option >L</option>
+                                <option >XL</option>
+                            </select>
                     </div>
-                </form>
+            </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Quantity</label>
+                    <input class="form-control" type="number" id="inputQuantity" name="quantity" min="1" max="99" value="1" required>
+                </div>
+            </div>
+            <div class="text-center">
+                    <form method="POST" action="{{ route('cart.add', ['estampa' => $item]) }}">
+                        @csrf 
+                        <button type="submit" name="addToCart" class="btn btn-outline-dark mt-auto">Add to Cart</button>
+                    </form>
             </div>
         </div>
     </div>

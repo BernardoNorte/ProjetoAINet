@@ -25,17 +25,11 @@ class ClienteRequest extends FormRequest
     public function rules()
     {
         return [
-            //'name' => 'required',
-            'name' => [
-                'required',
-                'unique',
-                Rule::unique('users', 'name')->ignore($this->user_id),
-            ],
-            //'email' => 'required',
+            'name' => 'required',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($this->user_id),
+                Rule::unique('users', 'email')->ignore($this->email, 'email')
             ],
             'nif' => 'nullable|digits:9',
             'address' => 'nullable',

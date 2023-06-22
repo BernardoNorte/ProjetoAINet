@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Estampa;
 use App\Models\Cliente;
 use App\Models\User;
 use App\Models\Encomenda;
 use Illuminate\Support\Facades\Auth;
 use Mail;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 use App\Http\Requests\EncomendaPost;
 use App\Http\Requests\TshirtPost;
@@ -19,14 +20,105 @@ use PDF;
 
 class CarrinhoController extends Controller
 {
+    public function show(): View
+    {
+        $cart = session('cart', []);
+        return view('cart.show', compact('cart'));
+    }
 
+    public function addToCart(Request $request, Estampa $estampa): RedirectResponse
+    {
+        $userType = $request->user()->user_type ?? 'C';
+        if ($userType == 'A' || $userType == 'E'){
+            $alertType = 'warning';
+            $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";
+        }else{
+            /*$clienteID = $request->user()->cliente->id;
+            $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
+            $htmlMessage = "Total de estampas -> $totalEstampas";*/
+            $cart = session('cart', []);
+            $qtd = ($cart[$estampa->id]['qtd'] ?? 0) + 1;
+            $size = $request->input('size');
+            $quantity = $request->input('quantity');
+            $cart[$estampa->id] = [
+                'id' => $estampa->id,
+                'qtd' => $qtd,
+                'name' => $estampa->name,
+                'image' => $estampa->image_url,
+                'size' => $size,
+                'color' => $request->input(),
+            ];
+            $request->session()->put('cart', $cart);
+            $alertType = 'success';
+            //$url = route('estampas.show', ['estampa' => $estampa]);
+            //$htmlMessage = "Tshirt <a href='$url'>#{$estampa->id}</a><strong>\"{$estampa->name}\"</strong> was added to the cart!";
+        }
+        
+        return back()
+            //->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
+    }
 
-    public function index(Request $request)
+    public function updateCart(Request $request, Estampa $estampa)
+    {
+        $cart = $request->session()->get('cart', []);
+        $qtd = $cart[$estampa->id]['qtd'] ?? 0;
+        $qtd += $request->quantidade;
+        if ($request->quantidade < 0){
+            $msg = 'Removed  ' . -$request->quantidade . ' t-shirts "' . $estampa->name . '"';
+        } else if ($request->quantidade > 0){
+            $msg = 'Added ' . $request->quantidade . ' t-shirts "' . $estampa->name . '"';
+        }
+
+        if($qtd <= 0)
+        {
+            unset($cart[$estampa->id]);
+            $msg = 'Removed all t-shirts "' . $estampa->name . '"';
+        } else {
+            $cart[$estampa->id] = [
+                'id' => $estampa->id,
+                'qtd' => $qtd,
+                'name' => $estampa->name,
+                'image' => $estampa->image_url,
+            ];
+        }
+        $request->session()->put('cart', $cart);
+        return back()
+            ->with('alert-msg', $msg)
+            ->with('alert-type', 'success');
+    }
+
+    public function destroyCartTshirt(Request $request, Estampa $estampa)
+    {
+        $cart = $request->session()->get('cart', []);
+        if (array_key_exists($estampa->id, $cart)){
+            unset($cart[$estampa->id]);
+            $request->session()->put('cart', $cart);
+            return back()
+                ->with('alert-msg', 'Removed all t-shirts related to "'. $estampa->name . '"')
+                ->with('alert-type', 'success');
+        }
+        return back()
+            ->with('alert-msg', 'T-shirt "' . $estampa->name . '" had no quantity')
+            ->with('alert-type', 'warning');
+    }
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->session()->forget('cart');
+        $htmlMessage = "Flushed Cart!";
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+    }
+
+    /*public function index(Request $request)
     {
         return view('carrinho.index')
             ->with('pageTitle', 'Carrinho de compras')
             ->with('carrinho', session('carrinho') ?? []);
     }
+
 
 
 
@@ -173,5 +265,5 @@ class CarrinhoController extends Controller
         return redirect('/')
             ->with('alert-msg', 'Encomenda foi passada para o estado pendente !')
             ->with('alert-type', 'success');
-    }
+    }*/
 }

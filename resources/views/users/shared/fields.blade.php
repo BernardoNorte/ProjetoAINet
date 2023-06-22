@@ -2,6 +2,7 @@
     $disabledStr = $readonlyData ?? false ? 'disabled' : '';
 @endphp
 
+@if (!$readonlyData)
 <div class="mb-3 form-floating">
     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="inputNome"
         {{ $disabledStr }} value="{{ old('name', $user->name) }}">
@@ -23,6 +24,29 @@
         </div>
     @enderror
 </div>
+@else
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>E-mail</th>       
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{$user->name}}</td>
+                <div class="mb-3 form-floating">
+                    <input type="hidden" name="name" value="{{$user->name}}">
+                </div>
+                <td>{{$user->email}}</td>
+                <div class="mb-3 form-floating" hidden>
+                    <input type="hidden" name="email" value="{{$user->email}}">
+                </div>
+            </tr>
+        </tbody>
+    </table>
+@endif
+
 @if ($showBlocked)
     <div class="mb-3">
         <div class="form-check form-switch" {{ $disabledStr }}>
