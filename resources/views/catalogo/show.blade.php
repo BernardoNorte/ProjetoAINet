@@ -1,6 +1,13 @@
 @extends('template.layout')
 @section('title', $item->name)
 
+@section('subtitulo')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('catalogo.index') }}">Catalogo</a></li>
+    <li class="breadcrumb-item"><strong>{{ $item->name }}</strong></li>
+</ol>
+@endsection
+
 @section('main')
 
 <head>
@@ -19,9 +26,11 @@
                   </div>
                 </div>
                 <h1>{{ $item->name }}</h1>
-                <img src="{{ $item->image_url }}" alt="{{ $item->name }}" width="200">
+                <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                    <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." width="360px" height="420px"/>
+                </div>
                 <p>{{ $item->description }}</p>
-                <p>Preço: {{session('unit_price_catalog') . " €"}}</p>
+                <p>Price: {{session('unit_price_catalog') . " €"}}</p>
                 <!-- Adicionar ao Carrinho -->
                 <form  method="POST">
                     @csrf
