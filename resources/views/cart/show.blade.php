@@ -23,6 +23,7 @@
                 <th>Price per</th>
                 <th>SubTotal</th>
                 <th></th>
+                <th></th>
                 <th class="button-icon-col"></th>
             </tr>
         </thead>
