@@ -24,11 +24,10 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required',
-            [
+            'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($this->user_id),
+                Rule::unique('users', 'email')->ignore($this->email, 'email')
             ],
             'user_type' => 'required|in:C,E,A',
             'blocked' => 'required:boolean',
