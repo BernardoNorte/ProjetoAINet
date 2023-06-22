@@ -43,7 +43,8 @@ class CarrinhoController extends Controller
             $color = $request->input('cor_codigo');
             $price_per = $request->session()->get('unit_price_catalog');
             $total_price = $quantity * $price_per;
-            $cart[$estampa->id] = [
+            $cartID = $estampa->id . '-' . $size;
+            $cart[$cartID] = [
                 'id' => $estampa->id,
                 'size' => $size,
                 'quantity' => $quantity,
@@ -93,11 +94,12 @@ class CarrinhoController extends Controller
             ->with('alert-type', 'success');
     }
 
-    public function destroyCartTshirt(Request $request, Estampa $estampa)
+    public function destroyCartTshirt(Request $request, Estampa $estampa, $size)
     {
         $cart = $request->session()->get('cart', []);
-        if (array_key_exists($estampa->id, $cart)){
-            unset($cart[$estampa->id]);
+        $cartID = $estampa->id . '-' . $size;
+        if (array_key_exists($cartID, $cart)){
+            unset($cart[$cartID]);
             $request->session()->put('cart', $cart);
             return back()
                 ->with('alert-msg', 'Removed all t-shirts related to "'. $estampa->name . '"')

@@ -23,7 +23,7 @@
                 <th>Price per</th>
                 <th>SubTotal</th>
                 <th></th>
-                <th></th>
+                <th class="button-icon-col"></th>
             </tr>
         </thead>
         <tbody>
@@ -53,11 +53,12 @@
                             <input type="submit" value="Decrement">
                         </form>
                     </td>
-                    <td>
-                        <form action="{{route('cart.destroy', $row['id'])}}" method="POST">
+                    <td class="button-icon-col">
+                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id'], 'size' => $row['size']]) }}">
                             @csrf 
-                            @method('delete')
-                            <input type="hidden" value="Remove">
+                            @method('DELETE')
+                            <button type="submit" name="removeFromCart" class="btn btn-danger">
+                                <i class="fas fa-remove"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -68,5 +69,9 @@
         <button type="submit" class="btn btn-primary" name="ok" form="formStore"> Confirm Cart</button>
         <button type="submit" class="btn btn-danger ms-3" name="clear" form="formClear"> Clear Cart</button>
     </div>
+    <form id="formClear" method="POST" action="{{route('cart.destroy')}}" class="d-none">
+        @csrf 
+        @method('delete')
+    </form>
 @endsection
 
