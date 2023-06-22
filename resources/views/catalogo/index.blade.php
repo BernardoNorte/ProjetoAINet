@@ -12,15 +12,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<!-- Header -->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
-        </div>
-    </div>
-</header>
-
 <form method="GET" action="{{ route('catalogo.index') }}">
     <div class="d-flex justify-content-between">
         <div class="flex-grow-1 pe-2">
@@ -83,9 +74,6 @@
             </div>
             <!-- Product actions-->
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-            @cannot('GateAdministrador')
-            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">Add to Cart</a></div>
-            @endcannot
                 <h5 class="fw-bolder text-center">{{$item->name}}</h5>
                 <h5 class="fw-bolder text-center">Category: {{$item->categoria->name}}</h5>
                 <h6 class="text-center">{{session('unit_price_catalog') . " €"}}</h6>

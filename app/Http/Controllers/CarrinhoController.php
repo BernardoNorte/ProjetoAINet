@@ -22,6 +22,7 @@ class CarrinhoController extends Controller
 {
     public function show(): View
     {
+
         $cart = session('cart', []);
         return view('cart.show', compact('cart'));
     }
@@ -111,6 +112,7 @@ class CarrinhoController extends Controller
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
     }
+
 
     /*public function index(Request $request)
     {
