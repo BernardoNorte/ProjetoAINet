@@ -28,7 +28,7 @@ class CarrinhoController extends Controller
 
     public function addToCart(Request $request, Estampa $estampa): RedirectResponse
     {
-        $userType = $request->user()->user_type ?? '';
+        $userType = $request->user()->user_type ?? 'C';
         if ($userType == 'A' || $userType == 'E'){
             $alertType = 'warning';
             $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";

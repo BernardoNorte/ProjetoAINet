@@ -63,6 +63,7 @@ Route::delete('cart/{estampa}', [CarrinhoController::class, 'removeFromCart'])->
 Route::get('cart', [CarrinhoController::class, 'show'])->name('cart.show');
 Route::post('cart', [CarrinhoController::class, 'store'])->name('cart.store');
 Route::delete('cart', [CarrinhoController::class, 'destroy'])->name('cart.destroy');
+Route::put('cart/{cart}', [CarrinhoController::class, 'update'])->name('cart.update');
 
 
 //Route::view('/', 'catalogo')->name('catalogo');
