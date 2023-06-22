@@ -41,7 +41,7 @@
                         <form action="{{route('cart.update', $row['id'])}}" method="POST">
                             @csrf 
                             @method('put')
-                            <input type="hidden" name="quantidade" value="1">
+                            <input type="hidden" name="quantity" value="1">
                             <input type="submit" value="Increment">
                         </form>
                     </td>
@@ -49,7 +49,7 @@
                         <form action="{{route('cart.update', $row['id'])}}" method="POST">
                             @csrf 
                             @method('put')
-                            <input type="hidden" name="quantidade" value="-1">
+                            <input type="hidden" name="quantity" value="-1">
                             <input type="submit" value="Decrement">
                         </form>
                     </td>

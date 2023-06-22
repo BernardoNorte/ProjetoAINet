@@ -68,24 +68,29 @@ class CarrinhoController extends Controller
     public function updateCart(Request $request, Estampa $estampa)
     {
         $cart = $request->session()->get('cart', []);
-        $qtd = $cart[$estampa->id]['qtd'] ?? 0;
-        $qtd += $request->quantidade;
-        if ($request->quantidade < 0){
-            $msg = 'Removed  ' . -$request->quantidade . ' t-shirts "' . $estampa->name . '"';
-        } else if ($request->quantidade > 0){
-            $msg = 'Added ' . $request->quantidade . ' t-shirts "' . $estampa->name . '"';
+        $cartID = $estampa->id . '-' . $size;
+        $qtd = $cart[$cartID]['qtd'] ?? 0;
+        $qtd += $request->quantity;
+        if ($request->quantity < 0){
+            $msg = 'Removed  ' . -$request->quantity . ' t-shirts "' . $estampa->name . '"';
+        } else if ($request->quantity > 0){
+            $msg = 'Added ' . $request->quantity . ' t-shirts "' . $estampa->name . '"';
         }
 
         if($qtd <= 0)
         {
-            unset($cart[$estampa->id]);
+            unset($cart[$cartID]);
             $msg = 'Removed all t-shirts "' . $estampa->name . '"';
         } else {
-            $cart[$estampa->id] = [
+            $cart[$cartID] = [
                 'id' => $estampa->id,
-                'qtd' => $qtd,
+                'size' => $size,
+                'quantity' => $quantity,
+                'color' => $color,
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
+                'price_per' => $price_per,
+                'total' => $total_price,
             ];
         }
         $request->session()->put('cart', $cart);
@@ -137,16 +142,16 @@ class CarrinhoController extends Controller
         $imagem_url = $request->input('imagem_url');
         $cor_codigo = $request->input('cor_codigo');
         $tamanho = $request->input('tamanho');
-        $quantidade = $request->input('quantidade');
+        $quantity = $request->input('quantity');
 
-        if (($request->session()->get('quantidade_desconto')) < $quantidade) {
+        if (($request->session()->get('quantity_desconto')) < $quantity) {
             $preco_un_catalogo = $request->session()->get('preco_un_catalogo_desconto');
-            $subtotal = $preco_un_catalogo * $quantidade;
+            $subtotal = $preco_un_catalogo * $quantity;
         }
 
-        if (($request->session()->get('quantidade_desconto')) >= $quantidade) {
+        if (($request->session()->get('quantity_desconto')) >= $quantity) {
             $preco_un_catalogo = $request->session()->get('preco_un_catalogo');
-            $subtotal = $preco_un_catalogo * $quantidade;
+            $subtotal = $preco_un_catalogo * $quantity;
         }
 
         // $qtd = ($carrinho[$idEstampa]['qtd'] ?? 0) + 1;
@@ -158,7 +163,7 @@ class CarrinhoController extends Controller
             'imagem_url' => $imagem_url,
             'cor_codigo' => $cor_codigo,
             'tamanho' => $tamanho,
-            'quantidade' => $quantidade,
+            'quantity' => $quantity,
             'preco_un_catalogo' => $preco_un_catalogo,
             'subtotal' => $subtotal
         ];
@@ -170,7 +175,7 @@ class CarrinhoController extends Controller
         $request->session()->put('carrinho', $carrinho);
         //return dd($qtd);
         return back()
-            ->with('alert-msg', 'Foi adicionado ao carrinho o idEstampa "' . $idEstampa . '" ao carrinho! Quantidade de inscrições = ' .  $tamanhoCarrinho)
+            ->with('alert-msg', 'Foi adicionado ao carrinho o idEstampa "' . $idEstampa . '" ao carrinho! quantity de inscrições = ' .  $tamanhoCarrinho)
             ->with('alert-type', 'success');
     }
 
@@ -226,7 +231,7 @@ class CarrinhoController extends Controller
                 'estampa_id' => $carrinhoLinha->idEstampa,
                 'cor_codigo' => $carrinhoLinha->cor_codigo,
                 'tamanho' => $carrinhoLinha->tamanho,
-                'quantidade' => $carrinhoLinha->quantidade,
+                'quantity' => $carrinhoLinha->quantity,
                 'preco_un' => $carrinhoLinha->preco_un_catalogo,
                 'subtotal' => $carrinhoLinha->subtotal
             ]);
