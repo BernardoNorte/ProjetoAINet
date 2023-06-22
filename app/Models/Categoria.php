@@ -18,4 +18,9 @@ class Categoria extends Model
         return $this->hasMany(Tshirt::class, 'id', 'category_id');
     }
 
+    public function estampas()
+{
+    return $this->hasMany(Estampa::class, 'category_id');
+}
+
 }
