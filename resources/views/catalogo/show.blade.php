@@ -26,13 +26,12 @@
                 </div>
             </div>
                 <h1>{{ $item->name }}</h1>
-<<<<<<< HEAD
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
                     <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." width="360px" height="420px"/>
                 </div>
-=======
-                <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="{{ $item->name }}" width="200">
->>>>>>> a34e5d8539291f76744cc904b2d70a864a03a767
+
+                
+
                 <p>{{ $item->description }}</p>
                 <p>Price: {{session('unit_price_catalog') . " €"}}</p>
                 <!-- Adicionar ao Carrinho -->

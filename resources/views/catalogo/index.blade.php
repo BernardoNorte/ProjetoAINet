@@ -81,14 +81,9 @@
                     <h5 class="fw-bolder">{{$item->name}}</h5>
                 </div> --}}
             </div>
-<<<<<<< HEAD
             <!-- Product actions-->
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-=======
-            @cannot('GateAdministrador')
-            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">Add to Cart</a></div>
-            @endcannot
->>>>>>> a34e5d8539291f76744cc904b2d70a864a03a767
+
 
                 <h5 class="fw-bolder text-center">{{$item->name}}</h5>
                 <h5 class="fw-bolder text-center">Category: {{$item->categoria->name}}</h5>
