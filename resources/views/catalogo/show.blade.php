@@ -22,7 +22,7 @@
                     <label for="inputColor" class="form-label">Color</label>
                     <select class="form-control" name="cor_codigo" id="inputColor" required>
                         @foreach($cores as $cor)
-                            <option value="{{$cor->codigo}}">{{ $cor->name }}</option>
+                            <option value="{{$cor->codigo}}" selected>{{ $cor->name }}</option>
                         @endforeach
                     </select>
                 </div>
