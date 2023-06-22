@@ -17,8 +17,8 @@
             <tr>
                 <th>Name</th>
                 <th>Photo</th>
-                <th>Quantity</th>
                 <th>Size</th>
+                <th>Quantity</th>
                 <th>Color</th>
                 <th>Sub Total</th>
                 <th></th>
@@ -31,10 +31,9 @@
                     <td>{{ $row['name'] }} </td>
                     <td><img src="{{$row['image'] ? asset('storage/tshirt_images/' . $row['image']) : asset('img/default_img.png') }}" alt="Foto da Estampa"  style="width:80px;height:80px"></td>
                     {{-- <td>{{$row['image']}}</td> --}}
-                    <td>{{ $row['qtd'] }} </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ $row['size'] }} </td>
+                    <td>{{ $row['quantity'] }} </td>
+                    <td>{{ $row['color'] }} </td>
                     <td>
                         <form action="{{route('cart.update', $row['id'])}}" method="POST">
                             @csrf 

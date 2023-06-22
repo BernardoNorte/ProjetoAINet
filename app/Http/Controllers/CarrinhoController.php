@@ -38,16 +38,16 @@ class CarrinhoController extends Controller
             $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
             $htmlMessage = "Total de estampas -> $totalEstampas";*/
             $cart = session('cart', []);
-            $qtd = ($cart[$estampa->id]['qtd'] ?? 0) + 1;
             $size = $request->input('size');
             $quantity = $request->input('quantity');
+            $color = $request->input('color_code');
             $cart[$estampa->id] = [
                 'id' => $estampa->id,
-                'qtd' => $qtd,
+                'size' => $size,
+                'quantity' => $quantity,
+                'color' => $color,
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
-                'size' => $size,
-                'color' => $request->input(),
             ];
             $request->session()->put('cart', $cart);
             $alertType = 'success';
