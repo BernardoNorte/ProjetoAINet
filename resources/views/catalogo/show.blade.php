@@ -20,11 +20,11 @@
             <div class="card-body">
                 <div class="dropdown" style="float:right;">
                     <label for="inputColor" class="form-label">Color</label>
-                    <div class="dropdown-content">
-                    @foreach($cores as $cor)
-                        <option value="{{$cor->codigo}}">{{ $cor->name }}</a>
-                    @endforeach
-                    </div>
+                    <select class="form-control" name="cor_codigo" id="inputColor" required>
+                        @foreach($cores as $cor)
+                            <option value="{{$cor->codigo}}">{{ $cor->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
                 <h1>{{ $item->name }}</h1>

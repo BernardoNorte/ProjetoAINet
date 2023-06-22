@@ -40,7 +40,9 @@ class CarrinhoController extends Controller
             $cart = session('cart', []);
             $size = $request->input('size');
             $quantity = $request->input('quantity');
-            $color = $request->input('color_code');
+            $color = $request->input('cor_codigo');
+            $price_per = $request->session()->get('unit_price_catalog');
+            $total_price = $quantity * $price_per;
             $cart[$estampa->id] = [
                 'id' => $estampa->id,
                 'size' => $size,
@@ -48,6 +50,8 @@ class CarrinhoController extends Controller
                 'color' => $color,
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
+                'price_per' => $price_per,
+                'total' => $total_price,
             ];
             $request->session()->put('cart', $cart);
             $alertType = 'success';

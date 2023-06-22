@@ -20,7 +20,8 @@
                 <th>Size</th>
                 <th>Quantity</th>
                 <th>Color</th>
-                <th>Sub Total</th>
+                <th>Price per</th>
+                <th>SubTotal</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -34,6 +35,8 @@
                     <td>{{ $row['size'] }} </td>
                     <td>{{ $row['quantity'] }} </td>
                     <td>{{ $row['color'] }} </td>
+                    <td>{{ $row['price_per'] }} €</td>
+                    <td>{{ $row['total'] }} €</td>
                     <td>
                         <form action="{{route('cart.update', $row['id'])}}" method="POST">
                             @csrf 
