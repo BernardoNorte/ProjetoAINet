@@ -30,12 +30,16 @@ class ClienteRequest extends FormRequest
                 //'required',
               //  Rule::unique('users', 'name')->ignore($this->user_id),
             //],
-            'email' => 'required|email',
-            //'email' => [
-              //  'required',
-                //'email',
-                //Rule::unique('users', 'email'),
-            //],
+            /* 'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->id),
+            ], */
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->email, 'email')
+            ],
             'nif' => 'nullable|digits:9',
             'address' => 'nullable',
             'default_payment_type' => 'nullable|in:MC,PAYPAL,VISA',
