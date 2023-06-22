@@ -31,7 +31,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
                 <div class="flex-grow-1 pe-2">
                     @if ((Auth::user()->user_type ?? '') == 'A')
-                        @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
+                        @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => true])
                     @else
                         @include('users.shared.fields', ['user' => $cliente->user, 'showBlocked' => false, 'showUserType' => false, 'readonlyData' => false])
                     @endif
