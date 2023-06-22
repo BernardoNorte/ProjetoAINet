@@ -38,7 +38,7 @@
                     <td>{{ $row['price_per'] }} €</td>
                     <td>{{ $row['total'] }} €</td>
                     <td>
-                        <form action="{{route('cart.update', $row['id'])}}" method="POST">
+                        <form action="{{route('cart.update', ['estampa' => $row['id'], 'size' => $row['size']])}}" method="POST">
                             @csrf 
                             @method('put')
                             <input type="hidden" name="quantity" value="1">
@@ -46,7 +46,7 @@
                         </form>
                     </td>
                     <td>
-                        <form action="{{route('cart.update', $row['id'])}}" method="POST">
+                        <form action="{{route('cart.update', ['estampa' => $row['id'], 'size' => $row['size']])}}" method="POST">
                             @csrf 
                             @method('put')
                             <input type="hidden" name="quantity" value="-1">
@@ -74,4 +74,3 @@
         @method('delete')
     </form>
 @endsection
-

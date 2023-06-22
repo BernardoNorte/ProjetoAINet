@@ -65,16 +65,16 @@ class CarrinhoController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function updateCart(Request $request, Estampa $estampa)
+    public function updateCart(Request $request, Estampa $estampa, $size)
     {
         $cart = $request->session()->get('cart', []);
         $cartID = $estampa->id . '-' . $size;
-        $qtd = $cart[$cartID]['qtd'] ?? 0;
-        $qtd += $request->quantity;
-        if ($request->quantity < 0){
-            $msg = 'Removed  ' . -$request->quantity . ' t-shirts "' . $estampa->name . '"';
-        } else if ($request->quantity > 0){
-            $msg = 'Added ' . $request->quantity . ' t-shirts "' . $estampa->name . '"';
+        $qtd = $cart[$cartID]['quantity'] ?? 0;
+        $qtd += $request->input('quantity');
+        if ($request->input('quantity') < 0){
+            $msg = 'Removed  ' . -$request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
+        } else if ($request->input('quantity') > 0){
+            $msg = 'Added ' . $request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
         }
 
         if($qtd <= 0)
@@ -85,12 +85,12 @@ class CarrinhoController extends Controller
             $cart[$cartID] = [
                 'id' => $estampa->id,
                 'size' => $size,
-                'quantity' => $quantity,
-                'color' => $color,
+                'quantity' => $qtd,
+                'color' => $cart[$cartID]['color'],
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
-                'price_per' => $price_per,
-                'total' => $total_price,
+                'price_per' => $cart[$cartID]['price_per'],
+                'total' => $cart[$cartID]['total'],
             ];
         }
         $request->session()->put('cart', $cart);
