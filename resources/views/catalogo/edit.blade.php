@@ -1,5 +1,4 @@
 @extends('template.layout')
-
 @section('header-title', "Alterar Estampa")
 
 @section('subtitulo')
@@ -22,17 +21,9 @@
         </div>
 
         <div class="form-group">
-            <label for="inputNome">Nome</label>
+            <label for="inputNome">Name</label>
             <input type="text" class="form-control" name="name" id="inputNome" value="{{ old('name', $estampa->name) }}">
             @error('name')
-                <div class="small text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="inputNome">Category</label>
-            <input type="text" class="form-control" name="category" id="inputNome" value="{{ old('category', $estampa->categoria->name) }}">
-            @error('category')
                 <div class="small text-danger">{{ $message }}</div>
             @enderror
         </div>
@@ -46,7 +37,7 @@
         </div>
 
         <div class="form-group">
-            <label for="inputFoto">Upload da foto</label>
+            <label for="inputFoto">Upload image</label>
             <input type="file" class="form-control" name="image_url" id="inputFoto">
             @error('image_url')
                 <div class="small text-danger">{{ $message }}</div>

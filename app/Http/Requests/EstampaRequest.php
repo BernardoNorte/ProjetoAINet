@@ -22,12 +22,13 @@ class EstampaRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'nome' => 'required',
-            'descricao' => 'nullable',
-            'imagem_url' => 'nullable|image|max:8192',
+            'name' => 'required',
+            'description' => 'nullable',
+            'category' => 'nullable',
+            'image_url' => 'nullable|image|max:8192',
         ];
     }
 }
