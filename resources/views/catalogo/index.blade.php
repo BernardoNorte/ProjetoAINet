@@ -83,10 +83,12 @@
                         <p>{{$item->description}}</p>
                     </span>
                 </div>
-                @cannot('GateAdministrador')
+                @if ((Auth::user()->user_type ?? '') != 'A')
                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">Buy</a></div>
-                @endcannot
-
+                @endif
+                @if ((Auth::user()->user_type ?? '') == 'A')
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.edit', ['catalogo' => $item]) }}">Edit</a></div>
+                @endif
             </div>
         </div>
     </div>

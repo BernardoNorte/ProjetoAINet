@@ -25,19 +25,11 @@
                     </div>
                 </div>
             </div>
-                <h1>{{ $item->name }}</h1>
+                <h1 class="text-center">{{ $item->name }}</h1>
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
                     <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." width="360px" height="420px"/>
                 </div>
-<<<<<<< HEAD
-                <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="{{ $item->name }}" width="200">
-=======
-
-                
-
->>>>>>> 1e3ff79b27906fe865e10aad1558a4eb57b066c4
-                <p>{{ $item->description }}</p>
-                <p>Price: {{session('unit_price_catalog') . " €"}}</p>
+                <h2>Price: {{session('unit_price_catalog') . " €"}}</h2>
                 <!-- Adicionar ao Carrinho -->
                 <input type="hidden" name="idEstampa" value="{{ $item->id }}">
                 <input type="hidden" name="image_url" value="{{ $item->image_url }}">

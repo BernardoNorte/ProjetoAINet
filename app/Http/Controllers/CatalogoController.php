@@ -10,7 +10,7 @@ use App\Models\Precos;
 use App\Models\Cor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Http\Requests\CatalogoRequest;
+use App\Http\Requests\EstampaRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -80,4 +80,51 @@ class CatalogoController extends Controller
         return view('catalogo.show', compact('item','cores'));
     }
 
+    public function edit($id)
+    {
+        $estampa = Estampa::find($id);
+        $estampas = Estampa::all();
+        return view('catalogo.edit', compact('estampa', 'estampas'));
+    }
+
+    public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
+    {
+        $formData = $request->validated();
+        $estampa = DB::transaction(function () use ($formData, $estampa, $request) {
+            $estampa->name = $formData['name'];
+            $estampa->category = $formData['category'];
+            $estampa->description = $formData['description'];
+            $estampa->save();
+            if ($request->hasFile('image_url')) {
+                if ($estampa->image_url) {
+                    Storage::delete('public/tshirt_images/' . $estampa->image_url);
+                }
+                $path = $request->image_url->store('public/tshirt_images');
+                $estampa->image_url = basename($path);
+                $estampa->save();
+            }
+            return $estampa;
+        });
+        $url = route('catalogo.show', ['id' => $estampa->id]);
+        $htmlMessage = "A estampa <a href='$url'>#{$estampa->id}</a>
+                        <strong>\"{$estampa->name}\"</strong> foi alterada com sucesso!";
+        return redirect()->route('catalogo.index')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+    }
+
+    public function destroy_image(Estampa $estampa): RedirectResponse
+    {
+        if ($estampa->image_url){
+            Storage::delete('public/tshirt_images/' . $estampa->image_url);
+            $estampa->image_url = null;
+            $estampa->save();
+        }
+
+        return redirect()->route('catalogo.edit', ['estampa' => $estampa])
+            ->with('alert-msg', 'Tshirt Photo "' . $estampa->name . '"was removed!')
+            ->with('alert-type', ' Success');
+    }
+
 }
+
