@@ -20,7 +20,7 @@ class EncomendaController extends Controller
     {
 
         $idEncomenda = $request->id ?? 0;
-        $filterByStatus = $encomenda->estado ?? '';
+        $filterByStatus = $encomenda->status ?? '';
         $encomendaQuery = Encomenda::query();
         if ($filterByStatus !== '')
         {
