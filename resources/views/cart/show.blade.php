@@ -39,7 +39,7 @@
                     <td>{{ $row['price_per'] }} €</td>
                     <td>{{ $row['total'] }} €</td>
                     <td>
-                        <form action="{{route('cart.update', ['estampa' => $row['id'], 'size' => $row['size']])}}" method="POST">
+                        <form action="{{route('cart.update', ['estampa' => $row['id']])}}" method="POST">
                             @csrf 
                             @method('put')
                             <input type="hidden" name="quantity" value="1">
@@ -47,7 +47,7 @@
                         </form>
                     </td>
                     <td>
-                        <form action="{{route('cart.update', ['estampa' => $row['id'], 'size' => $row['size']])}}" method="POST">
+                        <form action="{{route('cart.update', ['estampa' => $row['id']])}}" method="POST">
                             @csrf 
                             @method('put')
                             <input type="hidden" name="quantity" value="-1">
@@ -55,7 +55,7 @@
                         </form>
                     </td>
                     <td class="button-icon-col">
-                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id'], 'size' => $row['size']]) }}">
+                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id']]) }}">
                             @csrf 
                             @method('DELETE')
                             <button type="submit" name="removeFromCart" class="btn btn-danger">
@@ -70,6 +70,9 @@
         <button type="submit" class="btn btn-primary" name="ok" form="formStore"> Confirm Cart</button>
         <button type="submit" class="btn btn-danger ms-3" name="clear" form="formClear"> Clear Cart</button>
     </div>
+    <form id="formStore" method="POST" action="{{route('cart.store')}}" class="d-none">
+        @csrf
+    </form>
     <form id="formClear" method="POST" action="{{route('cart.destroy')}}" class="d-none">
         @csrf 
         @method('delete')

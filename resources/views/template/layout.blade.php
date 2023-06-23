@@ -37,6 +37,15 @@
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                             </ul>
                         </li>
+                        @if ((Auth::user()->user_type ?? '') == 'C')
+                        <a class="nav-link {{ Route::currentRouteName() == 'encomendas.minhas' ? 'active' : '' }}"
+                            href="{{ route('encomendas.minhas') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-file-text"></i></div>
+                            My Orders
+                        </a>
+                        
+                        <!-- <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'encomendas.minhas' ? 'active' : ''}}" href="{{ route('encomendas.minhas') }}">My Orders</a></li> -->
+                        @endif
                         @if ((Auth::user()->user_type ?? '') == 'A')
                             <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'clientes.index' ? 'active' : ''}}" href="{{ route('clientes.index') }}">Clients</a></li>
                         @endif

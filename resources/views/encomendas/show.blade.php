@@ -12,9 +12,12 @@
 
 @section('main')
     <div>
-        @include('encomendas.shared.fields', ['readonlyData' => true])
+        @include('encomendas.shared.fields', [
+            'encomendas' => $encomendas,
+        ])
     </div>
     <div class="my-4 d-flex justify-content-end">
         <a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}" class="btn btn-secondary ms-3">Edit Order</a>
     </div>
+
 @endsection

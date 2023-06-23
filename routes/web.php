@@ -16,18 +16,18 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Route::get('encomendas', [EncomendaController::class, 'index'])->name('encomendas.index');
+Route::get('encomendas', [EncomendaController::class, 'index'])->name('encomendas.index');
 
-//Route::get('encomendas/create', [EncomendaController::class, 'create'])->name('encomendas.create');
-//Route::post('encomendas', [EncomendaController::class, 'store'])->name('encomendas.store');
+Route::get('encomendas/create', [EncomendaController::class, 'create'])->name('encomendas.create');
+Route::post('encomendas', [EncomendaController::class, 'store'])->name('encomendas.store');
 
-//Route::get('encomendas/{encomenda}/edit', [EncomendaController::class, 'edit'])->name('encomendas.edit');
-//Route::put('encomendas/{encomenda}', [EncomendaController::class, 'update'])->name('encomendas.update');
+Route::get('encomendas/{encomenda}/edit', [EncomendaController::class, 'edit'])->name('encomendas.edit');
+Route::put('encomendas/{encomenda}', [EncomendaController::class, 'update'])->name('encomendas.update');
 
-//Route::delete('encomendas/{encomenda}', [EncomendaController::class, 'destroy'])->name('encomendas.destroy');
+Route::delete('encomendas/{encomenda}', [EncomendaController::class, 'destroy'])->name('encomendas.destroy');
 
-//Route::get('encomendas/{encomenda}', [EncomendaController::class, 'show'])->name('encomendas.show');
-Route::resource('encomendas', EncomendaController::class);
+Route::get('encomendas/{encomenda}/show', [EncomendaController::class, 'show'])->name('encomendas.show');
+//Route::resource('encomendas', EncomendaController::class);
 
 Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
@@ -64,12 +64,12 @@ Route::middleware('usar-carrinho')->group(function () {
     Route::get('cart', [CarrinhoController::class, 'show'])->name('cart.show');
     Route::post('cart', [CarrinhoController::class, 'store'])->name('cart.store');
     Route::delete('cart', [CarrinhoController::class, 'destroy'])->name('cart.destroy');
-    Route::put('cart/{estampa}/{size}', [CarrinhoController::class, 'updateCart'])->name('cart.update');
+    Route::put('cart/{estampa}', [CarrinhoController::class, 'updateCart'])->name('cart.update');
     Route::post('cart/{estampa}', [CarrinhoController::class, 'addToCart'])->name('cart.add');
-    Route::delete('cart/{estampa}/{size}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
+    Route::delete('cart/{estampa}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
 });
 
-
+Route::get('encomendas/minhas', [EncomendaController::class, 'minhasEncomendas'])->name('encomendas.minhas');
 
 
 

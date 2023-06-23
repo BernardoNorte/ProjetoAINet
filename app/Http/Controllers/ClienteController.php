@@ -91,8 +91,8 @@ class ClienteController extends Controller
         try {
             $user = $cliente->user;
                 DB::transaction(function () use ($cliente, $user) {
-                    $user->delete();
                     $cliente->delete();
+                    $user->delete();
                 });
                 if ($cliente->user->photo_url) {
                     Storage::delete('public/fotos/' . $cliente->user->photo_url);
