@@ -92,7 +92,7 @@ class CatalogoController extends Controller
         $formData = $request->validated();
         $estampa = DB::transaction(function () use ($formData, $estampa, $request) {
             $estampa->name = $formData['name'];
-            $estampa->category = $formData['category'];
+            $estampa->categoria->name = $formData['category'];
             $estampa->description = $formData['description'];
             $estampa->save();
             if ($request->hasFile('image_url')) {
