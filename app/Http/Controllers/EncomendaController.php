@@ -19,16 +19,23 @@ class EncomendaController extends Controller
     public function index(): View
     {
 
-        $idEncomenda = $request->id ?? 0;
+        $filterByID = $request->customer_id ?? 0;
         $filterByStatus = $encomenda->status ?? '';
+        $filterByDate = $encomenda->date ?? '';
         $encomendaQuery = Encomenda::query();
-        if ($filterByStatus !== '')
-        {
-            $encomendaStatus = encomenda::where('status', $filterByStatus)->pluck('id');
-            $encomendaQuery->whereIntegerInRaw('id', $encomendaStatus);
+        if ($filterByID !== null) {
+            $encomendaQuery->where('customer_id', $filterByID);
+        }
+
+        if ($filterByStatus !== '') {
+            $encomendaQuery->where('status', 'like', "%$filterByStatus%");
+        }
+        if ($filterByDate !== '') {
+            $encomendaQuery->whereDate('date', $filterByDate);
         }
         $encomendas = Encomenda::paginate(5);
-        return view('encomendas.index', compact('encomendas', 'filterByStatus'));
+        return view('encomendas.index', compact('encomendas', 'filterByID', 'filterByStatus', 'filterByDate'))
+            ->with('filterByDate', $filterByDate);
 
     }
 

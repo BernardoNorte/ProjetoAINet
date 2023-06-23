@@ -15,9 +15,8 @@
             <div class="flex-grow-1 pe-2">
                 <div class="d-flex justify-content-between">
                     <div class="mb-3 me-2 flex-grow-1 form-floating">
-                        <input type="text" class="form-control" name="status" id="inputStatus"
-                            value="{{ old('status', $filterByStatus) }}">
-                        <label for="inputStatus" class="form-label">Filter</label>
+                        <input type="number" class="form-control" name="id" id="inputID" value="{{ old('id', $filterByID) }}">
+                        <label for="inputID" class="form-label">Filter by Client ID</label>
                     </div>
                 </div>
             </div>
