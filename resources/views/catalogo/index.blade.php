@@ -75,7 +75,9 @@
             <!-- Product actions-->
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <h5 class="fw-bolder text-center">{{$item->name}}</h5>
+                @if($item->categoria)
                 <h5 class="fw-bolder text-center">Category: {{$item->categoria->name}}</h5>
+                @endif
                 <h6 class="text-center">{{session('unit_price_catalog') . " €"}}</h6>
                 <div class="popup" onclick="myFunction('popup{{$item->id}}')">
                     <h6 class="text-center">Description</h6>
@@ -87,7 +89,14 @@
                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">Buy</a></div>
                 @endif
                 @if ((Auth::user()->user_type ?? '') == 'A')
-                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.edit', ['catalogo' => $item]) }}">Edit</a></div>
+                <div class="text-center">
+                    <a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.edit', ['catalogo' => $item]) }}">Edit</a>
+                    <form class="d-inline" action="{{ route('catalogo.destroy', ['catalogo' => $item]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger mt-auto" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                    </form>
+                </div>
                 @endif
             </div>
         </div>

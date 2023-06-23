@@ -13,6 +13,7 @@ use Illuminate\View\View;
 use App\Http\Requests\EstampaRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class CatalogoController extends Controller
 {
@@ -87,14 +88,17 @@ class CatalogoController extends Controller
         return view('catalogo.edit', compact('estampa', 'estampas'));
     }
 
-    public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
+    /*public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
     {
         $formData = $request->validated();
-        $estampa = DB::transaction(function () use ($formData, $estampa, $request) {
+        $novaEstampa = DB::transaction(function () use ($formData, $estampa, $request) {
+            $estampa->categoria->id = $formData['category_id'];
             $estampa->name = $formData['name'];
-            $estampa->categoria->name = $formData['category'];
             $estampa->description = $formData['description'];
+            
+            
             $estampa->save();
+            
             if ($request->hasFile('image_url')) {
                 if ($estampa->image_url) {
                     Storage::delete('public/tshirt_images/' . $estampa->image_url);
@@ -102,15 +106,43 @@ class CatalogoController extends Controller
                 $path = $request->image_url->store('public/tshirt_images');
                 $estampa->image_url = basename($path);
                 $estampa->save();
-            }
+            } 
+
+            $estampa->save();
+
             return $estampa;
         });
-        $url = route('catalogo.show', ['id' => $estampa->id]);
-        $htmlMessage = "A estampa <a href='$url'>#{$estampa->id}</a>
-                        <strong>\"{$estampa->name}\"</strong> foi alterada com sucesso!";
+        $url = route('catalogo.show', ['id' => $novaEstampa->id, 'allowUpload' => false]);
+        $htmlMessage = "A estampa <a href='$url'>#{$novaEstampa->id}</a>
+                        <strong>\"{$novaEstampa->name}\"</strong> foi alterada com sucesso!";
         return redirect()->route('catalogo.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
+    }*/
+
+    public function update(EstampaRequest $request, Estampa $estampa)
+    {
+
+        $validated_data = $request->validated();
+        $estampa->name = $validated_data['name'];
+        $estampa->description = $validated_data['description'];
+
+
+        if($request->hasFile('image_url')){
+            Storage::delete('public/tshirt_images/' . $estampa->image_url);
+            $path = $request->image_url->store('public/tshirt_images');
+            $estampa->image_url = basename($path);
+        }
+
+        $estampa->save();
+
+        return redirect()->route('catalogo.index')
+            ->with('alert-msg', 'estampa "' . $estampa->name . '" foi alterado com sucesso!')
+            ->with('alert-type', 'success');
+    }
+
+    public function destroy(Estampa $estampa): RedirectResponse
+    {
     }
 
     public function destroy_image(Estampa $estampa): RedirectResponse
