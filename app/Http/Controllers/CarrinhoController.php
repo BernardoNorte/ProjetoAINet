@@ -43,17 +43,23 @@ class CarrinhoController extends Controller
             $color = $request->input('cor_codigo');
             $price_per = $request->session()->get('unit_price_catalog');
             $total_price = $quantity * $price_per;
-            $cartID = $estampa->id . '-' . $size;
-            $cart[$cartID] = [
-                'id' => $estampa->id,
-                'size' => $size,
-                'quantity' => $quantity,
-                'color' => $color,
-                'name' => $estampa->name,
-                'image' => $estampa->image_url,
-                'price_per' => $price_per,
-                'total' => $total_price,
-            ];
+            $cartID = $estampa->id;
+            if(array_key_exists($cartID, $cart))
+            {
+                $cart[$cartID]['quantity'] += $quantity;
+                $cart[$cartID]['total'] += $total_price;
+            }else {
+                $cart[$cartID] = [
+                    'id' => $estampa->id,
+                    'size' => $size,
+                    'quantity' => $quantity,
+                    'color' => $color,
+                    'name' => $estampa->name,
+                    'image' => $estampa->image_url,
+                    'price_per' => $price_per,
+                    'total' => $total_price,
+                ];
+            }
             $request->session()->put('cart', $cart);
             $alertType = 'success';
             //$url = route('estampas.show', ['estampa' => $estampa]);
@@ -65,10 +71,10 @@ class CarrinhoController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function updateCart(Request $request, Estampa $estampa, $size)
+    public function updateCart(Request $request, Estampa $estampa)
     {
         $cart = $request->session()->get('cart', []);
-        $cartID = $estampa->id . '-' . $size;
+        $cartID = $estampa->id;
         $qtd = $cart[$cartID]['quantity'] ?? 0;
         $qtd += $request->input('quantity');
         if ($request->input('quantity') < 0){
@@ -84,7 +90,7 @@ class CarrinhoController extends Controller
         } else {
             $cart[$cartID] = [
                 'id' => $estampa->id,
-                'size' => $size,
+                'size' => $cart[$cartID]['size'],
                 'quantity' => $qtd,
                 'color' => $cart[$cartID]['color'],
                 'name' => $estampa->name,
@@ -99,10 +105,10 @@ class CarrinhoController extends Controller
             ->with('alert-type', 'success');
     }
 
-    public function destroyCartTshirt(Request $request, Estampa $estampa, $size)
+    public function destroyCartTshirt(Request $request, Estampa $estampa)
     {
         $cart = $request->session()->get('cart', []);
-        $cartID = $estampa->id . '-' . $size;
+        $cartID = $estampa->id;
         if (array_key_exists($cartID, $cart)){
             unset($cart[$cartID]);
             $request->session()->put('cart', $cart);
@@ -122,6 +128,85 @@ class CarrinhoController extends Controller
         return back()
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
+    }
+
+
+    public function store(Request $request): RedirectResponse
+    {
+        try {
+            $userType = $request->user()->user_type ?? 'C';
+            if ($userType != 'C') {
+                $alertType = 'warning';
+                $htmlMessage = "O utilizador não é cliente, logo não pode confirmar a compra do carrinho";
+            } 
+            else{
+                $cart = session('cart', []);
+                $precoTotal = 0;
+                $total = count($cart);
+                if ($total < 1) {
+                    $alertType = 'warning';
+                    $htmlMessage = "Não é possível confirmar a compra porque não há t-shirts no carrinho";
+                } 
+                else {
+                    $cliente = $request->user()->cliente;
+                    
+                    foreach ($cart as $cartItem){
+                        $precoTotal += $cartItem['total']; 
+                    }
+
+                    $order = DB::transaction(function () use ($cliente, $cart, $precoTotal){
+                        
+                        $newOrder = new Encomenda();
+                        
+                        $newOrder->customer_id = $cliente->id;
+                        $newOrder->date = date("Y-m-d");
+                        $newOrder->status = 'pending'; 
+                        $newOrder->total_price = $precoTotal;
+                        $newOrder->nif = $cliente->nif;
+                        $newOrder->address = $cliente->address;
+                        $newOrder->payment_type = $cliente->default_payment_type;
+                        $newOrder->payment_ref = $cliente->default_payment_ref ?? (Auth::user()->mail ?? '');
+                        
+                        $newOrder->save();
+                        //debug($newOrder);
+
+                        foreach ($cart as $tshirt){
+                            $newOrderItem = new Tshirt();
+                            
+                            $newOrderItem->order_id = $newOrder->id;
+                            $newOrderItem->tshirt_image_id = $tshirt["id"];
+                            $newOrderItem->qty = $tshirt["quantity"];
+                            $newOrderItem->size = $tshirt["size"];
+
+                            
+                            $newOrderItem->unit_price = $tshirt['price_per'];
+                            $newOrderItem->sub_total = $tshirt['total'];
+                            $newOrderItem->color_code = $tshirt['color'];
+                            //debug($newOrderItem);
+
+                            $newOrderItem->save();
+                        }
+                    });
+                    
+                    if ($total == 1) {
+                        $htmlMessage = "Foi confirmada a compra de 1 item pelo cliente #{$cliente->id} <strong>\"{$request->user()->name}\"</strong>";
+                    } else {
+                        $htmlMessage = "Foi confirmada a compra de $total item pelo cliente #{$cliente->id} <strong>\"{$request->user()->name}\"</strong>";
+                    }
+                    $request->session()->forget('cart');
+                    return redirect()->route('catalogo.index')
+                        ->with('alert-msg', $htmlMessage)
+                        ->with('alert-type', 'success');
+                }
+            }
+            
+        } catch (\Exception $error) {
+            $htmlMessage = "Não foi possível confirmar a compra, porque ocorreu um erro!";
+            $alertType = 'danger';
+        }
+        return redirect('login')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
     }
 
 

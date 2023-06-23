@@ -55,10 +55,10 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'nif' => ['required', 'integer', 'unique:clientes'],
-            'address' => ['required', 'string', 'max:255'],
-            'default_payment_type' => ['required', 'in:VISA,MC,PAYPAL'],
-            'default_payment_ref' => ['required', 'string', 'max:255'],
+            'nif' => ['nullable', 'integer', 'unique:clientes'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'default_payment_type' => ['nullable', 'in:VISA,MC,PAYPAL'],
+            'default_payment_ref' => ['nullable', 'string', 'max:255'],
         ]);
     }
 

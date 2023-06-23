@@ -23,6 +23,21 @@ class EncomendaController extends Controller
 
     }
 
+    public function minhasEncomendas(Request $request): View
+    {
+        $user_type = '';
+        if ($request->user()) {
+            $user_type = $request->user()->user_type ?? '';
+        }
+        if ($user_type == 'C') {
+            $encomendas = $request->user()->cliente->encomendas;
+        } else {
+            $encomendas = Encomenda::paginate(5);
+            return view('encomendas.index', compact('encomendas'));
+        }
+        return view('encomendas.minhas', compact('encomendas', 'user_type'));
+    }
+
     public function create(): View
     {
         $newEncomenda = new Encomenda();
@@ -52,10 +67,14 @@ class EncomendaController extends Controller
         return redirect()->route('encomendas.index');
     }
 
-    public function show(Encomenda $encomenda): View
+    public function show(Request $request, Encomenda $encomenda): View
     {
-        return view('encomendas.show')->withEncomenda($encomenda);
+        $tshirts = Tshirt::all();
+        return view('encomendas.show')
+            ->with('encomenda', $encomenda)
+            ->with('tshirt', $tshirts);
     }
 
+    
 
 }

@@ -106,9 +106,7 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         try {
-                if ($user->photo_url) {
-                    Storage::delete('public/fotos/' . $user->photo_url);
-                }
+                destroy_foto($user);
                 $user->delete();
                 $htmlMessage = "User #{$user->id}
                         <strong>\"{$user->name}\"</strong> foi apagado com sucesso!";
