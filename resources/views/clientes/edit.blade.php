@@ -24,7 +24,7 @@
     @endsection
 
     @section('main')
-        <form id="form_cliente" novalidate class="needs-validation" method="POST"
+        <form id="form_cliente" method="POST"
             action="{{ route('clientes.update', ['cliente' => $cliente]) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')

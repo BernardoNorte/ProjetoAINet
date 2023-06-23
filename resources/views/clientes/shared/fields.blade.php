@@ -106,5 +106,9 @@
             </div>
         </div>
     @endif
+@else
+    <div class="mb-3 form-floating" hidden>
+        <input type="hidden" name="blocked" value="{{$cliente->user->blocked}}">
+    </div>
 @endif
 

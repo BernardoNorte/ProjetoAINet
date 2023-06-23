@@ -55,6 +55,7 @@ class ClienteController extends Controller
                 }
                 $path = $request->file_foto->store('public/photos');
                 $cliente->user->photo_url = basename($path);
+                $user->save();
                 $cliente->save();
             }
             return $cliente;
@@ -62,7 +63,7 @@ class ClienteController extends Controller
         $url = route('clientes.show', ['cliente' => $cliente]);
         $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
                         <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
-        return redirect()->route('clientes.index')
+        return redirect()->route('home')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
     }
