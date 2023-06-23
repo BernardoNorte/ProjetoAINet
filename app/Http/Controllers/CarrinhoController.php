@@ -38,16 +38,21 @@ class CarrinhoController extends Controller
             $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
             $htmlMessage = "Total de estampas -> $totalEstampas";*/
             $cart = session('cart', []);
-            $qtd = ($cart[$estampa->id]['qtd'] ?? 0) + 1;
             $size = $request->input('size');
             $quantity = $request->input('quantity');
-            $cart[$estampa->id] = [
+            $color = $request->input('cor_codigo');
+            $price_per = $request->session()->get('unit_price_catalog');
+            $total_price = $quantity * $price_per;
+            $cartID = $estampa->id . '-' . $size;
+            $cart[$cartID] = [
                 'id' => $estampa->id,
-                'qtd' => $qtd,
+                'size' => $size,
+                'quantity' => $quantity,
+                'color' => $color,
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
-                'size' => $size,
-                'color' => $request->input(),
+                'price_per' => $price_per,
+                'total' => $total_price,
             ];
             $request->session()->put('cart', $cart);
             $alertType = 'success';
@@ -60,27 +65,32 @@ class CarrinhoController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function updateCart(Request $request, Estampa $estampa)
+    public function updateCart(Request $request, Estampa $estampa, $size)
     {
         $cart = $request->session()->get('cart', []);
-        $qtd = $cart[$estampa->id]['qtd'] ?? 0;
-        $qtd += $request->quantidade;
-        if ($request->quantidade < 0){
-            $msg = 'Removed  ' . -$request->quantidade . ' t-shirts "' . $estampa->name . '"';
-        } else if ($request->quantidade > 0){
-            $msg = 'Added ' . $request->quantidade . ' t-shirts "' . $estampa->name . '"';
+        $cartID = $estampa->id . '-' . $size;
+        $qtd = $cart[$cartID]['quantity'] ?? 0;
+        $qtd += $request->input('quantity');
+        if ($request->input('quantity') < 0){
+            $msg = 'Removed  ' . -$request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
+        } else if ($request->input('quantity') > 0){
+            $msg = 'Added ' . $request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
         }
 
         if($qtd <= 0)
         {
-            unset($cart[$estampa->id]);
+            unset($cart[$cartID]);
             $msg = 'Removed all t-shirts "' . $estampa->name . '"';
         } else {
-            $cart[$estampa->id] = [
+            $cart[$cartID] = [
                 'id' => $estampa->id,
-                'qtd' => $qtd,
+                'size' => $size,
+                'quantity' => $qtd,
+                'color' => $cart[$cartID]['color'],
                 'name' => $estampa->name,
                 'image' => $estampa->image_url,
+                'price_per' => $cart[$cartID]['price_per'],
+                'total' => $cart[$cartID]['total'],
             ];
         }
         $request->session()->put('cart', $cart);
@@ -89,11 +99,12 @@ class CarrinhoController extends Controller
             ->with('alert-type', 'success');
     }
 
-    public function destroyCartTshirt(Request $request, Estampa $estampa)
+    public function destroyCartTshirt(Request $request, Estampa $estampa, $size)
     {
         $cart = $request->session()->get('cart', []);
-        if (array_key_exists($estampa->id, $cart)){
-            unset($cart[$estampa->id]);
+        $cartID = $estampa->id . '-' . $size;
+        if (array_key_exists($cartID, $cart)){
+            unset($cart[$cartID]);
             $request->session()->put('cart', $cart);
             return back()
                 ->with('alert-msg', 'Removed all t-shirts related to "'. $estampa->name . '"')
@@ -131,16 +142,16 @@ class CarrinhoController extends Controller
         $imagem_url = $request->input('imagem_url');
         $cor_codigo = $request->input('cor_codigo');
         $tamanho = $request->input('tamanho');
-        $quantidade = $request->input('quantidade');
+        $quantity = $request->input('quantity');
 
-        if (($request->session()->get('quantidade_desconto')) < $quantidade) {
+        if (($request->session()->get('quantity_desconto')) < $quantity) {
             $preco_un_catalogo = $request->session()->get('preco_un_catalogo_desconto');
-            $subtotal = $preco_un_catalogo * $quantidade;
+            $subtotal = $preco_un_catalogo * $quantity;
         }
 
-        if (($request->session()->get('quantidade_desconto')) >= $quantidade) {
+        if (($request->session()->get('quantity_desconto')) >= $quantity) {
             $preco_un_catalogo = $request->session()->get('preco_un_catalogo');
-            $subtotal = $preco_un_catalogo * $quantidade;
+            $subtotal = $preco_un_catalogo * $quantity;
         }
 
         // $qtd = ($carrinho[$idEstampa]['qtd'] ?? 0) + 1;
@@ -152,7 +163,7 @@ class CarrinhoController extends Controller
             'imagem_url' => $imagem_url,
             'cor_codigo' => $cor_codigo,
             'tamanho' => $tamanho,
-            'quantidade' => $quantidade,
+            'quantity' => $quantity,
             'preco_un_catalogo' => $preco_un_catalogo,
             'subtotal' => $subtotal
         ];
@@ -164,7 +175,7 @@ class CarrinhoController extends Controller
         $request->session()->put('carrinho', $carrinho);
         //return dd($qtd);
         return back()
-            ->with('alert-msg', 'Foi adicionado ao carrinho o idEstampa "' . $idEstampa . '" ao carrinho! Quantidade de inscrições = ' .  $tamanhoCarrinho)
+            ->with('alert-msg', 'Foi adicionado ao carrinho o idEstampa "' . $idEstampa . '" ao carrinho! quantity de inscrições = ' .  $tamanhoCarrinho)
             ->with('alert-type', 'success');
     }
 
@@ -220,7 +231,7 @@ class CarrinhoController extends Controller
                 'estampa_id' => $carrinhoLinha->idEstampa,
                 'cor_codigo' => $carrinhoLinha->cor_codigo,
                 'tamanho' => $carrinhoLinha->tamanho,
-                'quantidade' => $carrinhoLinha->quantidade,
+                'quantity' => $carrinhoLinha->quantity,
                 'preco_un' => $carrinhoLinha->preco_un_catalogo,
                 'subtotal' => $carrinhoLinha->subtotal
             ]);

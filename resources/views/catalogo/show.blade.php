@@ -13,37 +13,45 @@
 <head>
     <link href="{{ asset('css/catalogo.css') }}" rel="stylesheet">
 </head>
+<form method="POST" action="{{ route('cart.add', ['estampa' => $item])}}">
+@csrf
     <div class="container">
         <div class="card">
             <div class="card-body">
                 <div class="dropdown" style="float:right;">
-                    <button class="dropbtn">Choose color</button>
-                    <div class="dropdown-content">
-                    @foreach($cores as $cor)
-                        <a href="#">{{ $cor->name }}</a>
-                    @endforeach
-                    </div>
+                    <label for="inputColor" class="form-label">Color</label>
+                    <select class="form-control" name="cor_codigo" id="inputColor" required>
+                        @foreach($cores as $cor)
+                            <option value="{{$cor->name}}" selected>{{ $cor->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
                 <h1 class="text-center">{{ $item->name }}</h1>
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
                     <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." width="360px" height="420px"/>
                 </div>
+<<<<<<< HEAD
                 <h2>Price: {{session('unit_price_catalog') . " €"}}</h2>
+=======
+
+                <p>{{ $item->description }}</p>
+                <p>Price: {{session('unit_price_catalog') . " €"}}</p>
+>>>>>>> b1ab6b829748584e03e76ca5d578d05128a71325
                 <!-- Adicionar ao Carrinho -->
                 <input type="hidden" name="idEstampa" value="{{ $item->id }}">
                 <input type="hidden" name="image_url" value="{{ $item->image_url }}">
             <div class="form-group">
                 <div class="form-group">
-                    <div class="mb-3 form-floating">
-                        <label for="inputSize" class="form-label">Size</label>
-                            <select class="form-control" name="size" id="inputSize">
-                                <option >S</option>
-                                <option >M</option>
-                                <option >L</option>
-                                <option >XL</option>
-                            </select>
-                    </div>
+                <div class="mb-3 form-floating">
+                    <label for="inputSize" class="form-label">Size</label>
+                    <select class="form-control" name="size" id="inputSize" required>
+                        <option value="S" selected>S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                </div>
             </div>
 
                 <div class="form-group">
