@@ -14,12 +14,21 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class EncomendaController extends Controller
+
 {
     public function index(): View
     {
 
+        $idEncomenda = $request->id ?? 0;
+        $filterByStatus = $encomenda->estado ?? '';
+        $encomendaQuery = Encomenda::query();
+        if ($filterByStatus !== '')
+        {
+            $encomendaStatus = encomenda::where('status', $filterByStatus)->pluck('id');
+            $encomendaQuery->whereIntegerInRaw('id', $encomendaStatus);
+        }
         $encomendas = Encomenda::paginate(5);
-        return view('encomendas.index', compact('encomendas'));
+        return view('encomendas.index', compact('encomendas', 'filterByStatus'));
 
     }
 

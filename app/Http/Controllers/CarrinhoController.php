@@ -43,7 +43,7 @@ class CarrinhoController extends Controller
             $color = $request->input('cor_codigo');
             $price_per = $request->session()->get('unit_price_catalog');
             $total_price = $quantity * $price_per;
-            $cartID = $estampa->id;
+            $cartID = $estampa->id . '-' . $size;
             if(array_key_exists($cartID, $cart))
             {
                 $cart[$cartID]['quantity'] += $quantity;
@@ -51,6 +51,7 @@ class CarrinhoController extends Controller
             }else {
                 $cart[$cartID] = [
                     'id' => $estampa->id,
+                    'cartID' => $cartID,
                     'size' => $size,
                     'quantity' => $quantity,
                     'color' => $color,
@@ -71,54 +72,21 @@ class CarrinhoController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function updateCart(Request $request, Estampa $estampa)
+    public function destroyCartTshirt(Request $request, Estampa $estampa, $size)
     {
         $cart = $request->session()->get('cart', []);
-        $cartID = $estampa->id;
-        $qtd = $cart[$cartID]['quantity'] ?? 0;
-        $qtd += $request->input('quantity');
-        if ($request->input('quantity') < 0){
-            $msg = 'Removed  ' . -$request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
-        } else if ($request->input('quantity') > 0){
-            $msg = 'Added ' . $request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
+
+        foreach ($cart as $cartID => $cartItem) {
+            if ($cartItem['id'] === $estampa->id && $cartItem['size'] === $size) {
+                unset($cart[$cartID]);
+            }
         }
 
-        if($qtd <= 0)
-        {
-            unset($cart[$cartID]);
-            $msg = 'Removed all t-shirts "' . $estampa->name . '"';
-        } else {
-            $cart[$cartID] = [
-                'id' => $estampa->id,
-                'size' => $cart[$cartID]['size'],
-                'quantity' => $qtd,
-                'color' => $cart[$cartID]['color'],
-                'name' => $estampa->name,
-                'image' => $estampa->image_url,
-                'price_per' => $cart[$cartID]['price_per'],
-                'total' => $cart[$cartID]['total'],
-            ];
-        }
         $request->session()->put('cart', $cart);
-        return back()
-            ->with('alert-msg', $msg)
-            ->with('alert-type', 'success');
-    }
 
-    public function destroyCartTshirt(Request $request, Estampa $estampa)
-    {
-        $cart = $request->session()->get('cart', []);
-        $cartID = $estampa->id;
-        if (array_key_exists($cartID, $cart)){
-            unset($cart[$cartID]);
-            $request->session()->put('cart', $cart);
-            return back()
-                ->with('alert-msg', 'Removed all t-shirts related to "'. $estampa->name . '"')
-                ->with('alert-type', 'success');
-        }
         return back()
-            ->with('alert-msg', 'T-shirt "' . $estampa->name . '" had no quantity')
-            ->with('alert-type', 'warning');
+            ->with('alert-msg', 'Removed the t-shirt from the cart')
+            ->with('alert-type', 'success');
     }
 
     public function destroy(Request $request): RedirectResponse

@@ -22,8 +22,6 @@
                 <th>Color</th>
                 <th>Price per</th>
                 <th>SubTotal</th>
-                <th></th>
-                <th></th>
                 <th class="button-icon-col"></th>
             </tr>
         </thead>
@@ -35,30 +33,17 @@
                     {{-- <td>{{$row['image']}}</td> --}}
                     <td>{{ $row['size'] }} </td>
                     <td>{{ $row['quantity'] }} </td>
-                    <td>{{ $row['color'] }} </td>
+                    <td style="width: 30px;">
+                        <div style="background-color: #{{ $row['color'] }}; border-radius: 50%; padding-bottom: 100%;"></div>
+                    </td>
+
                     <td>{{ $row['price_per'] }} €</td>
                     <td>{{ $row['total'] }} €</td>
-                    <td>
-                        <form action="{{route('cart.update', ['estampa' => $row['id']])}}" method="POST">
-                            @csrf 
-                            @method('put')
-                            <input type="hidden" name="quantity" value="1">
-                            <input type="submit" value="Increment">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{{route('cart.update', ['estampa' => $row['id']])}}" method="POST">
-                            @csrf 
-                            @method('put')
-                            <input type="hidden" name="quantity" value="-1">
-                            <input type="submit" value="Decrement">
-                        </form>
-                    </td>
                     <td class="button-icon-col">
-                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id']]) }}">
+                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id'], 'size' => $row['size']]) }}">
                             @csrf 
                             @method('DELETE')
-                            <button type="submit" name="removeFromCart" class="btn btn-danger">
+                            <button type="submit" name="destroyCartTshirt" class="btn btn-danger">
                                 <i class="fas fa-remove"></i></button>
                         </form>
                     </td>
