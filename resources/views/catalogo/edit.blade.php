@@ -31,7 +31,7 @@
 
         <div class="form-group">
             <label for="inputNome">Category</label>
-            <input type="text" class="form-control" name="category" id="inputNome" value="{{ old('category', $estampa->category) }}">
+            <input type="text" class="form-control" name="category" id="inputNome" value="{{ old('category', $estampa->categoria->name) }}">
             @error('category')
                 <div class="small text-danger">{{ $message }}</div>
             @enderror
