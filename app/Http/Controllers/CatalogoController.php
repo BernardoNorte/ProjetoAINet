@@ -94,9 +94,6 @@ class CatalogoController extends Controller
     }
 
 
-    public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
-
-
 
     //public function update (EstampaRequest $request, Estampa $estampa): RedirectResponse
     
