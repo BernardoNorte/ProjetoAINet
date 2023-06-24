@@ -93,7 +93,7 @@ class EncomendaController extends Controller
 
     public function statistics(): View
     {
-        $ordersByYear = Encomenda::select(
+        $AllOrdersByYear = Encomenda::select(
             DB::raw("YEAR(created_at) as year"),
             DB::raw("COUNT(*) as total_orders")
         )
@@ -101,10 +101,20 @@ class EncomendaController extends Controller
         ->orderBy(DB::raw("YEAR(created_at)"))
         ->get();
 
-        $years = $ordersByYear->pluck('year')->all();
-        $totalOrders = $ordersByYear->pluck('total_orders')->all();
+        $AllOrdersByStatus = Encomenda::select(
+            DB::raw("status"),
+            DB::raw("COUNT(*) as total_orders2"),
+        )
+        ->groupBy(DB::raw("status"))
+        ->orderBy(DB::raw("status"))
+        ->get();
 
-        return view('encomendas.statistics', compact('years', 'totalOrders'));
+        $years = $AllOrdersByYear->pluck('year')->all();
+        $totalOrders = $AllOrdersByYear->pluck('total_orders')->all();
+        $totalOrdersByStatus = $AllOrdersByStatus->pluck('total_orders2')->all();
+        $status = $AllOrdersByStatus->pluck('status')->all();
+
+        return view('encomendas.statistics', compact('years', 'totalOrders', 'totalOrdersByStatus', 'status'));
     }
 
 
