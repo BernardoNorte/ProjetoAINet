@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class UsarCarrinho
+class ClientOrdersHistoric
 {
     /**
      * Handle an incoming request.
@@ -21,7 +21,7 @@ class UsarCarrinho
             return $request->expectsJson()
                 ? abort(403, 'You are not allowed')
                 :redirect()->route('root')
-                ->with('alert-msg', 'You cannot use the cart!')
+                ->with('alert-msg', 'You cannot see your historic!')
                 ->with('alert-type', 'danger');
         }
         return $next($request);

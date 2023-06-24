@@ -71,11 +71,16 @@ Route::middleware('usar-carrinho')->group(function () {
     Route::delete('cart/{estampa}/{size}/{color}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
 });
 
-Route::get('encomendas/minhas', [EncomendaController::class, 'minhasEncomendas'])->name('encomendas.minhas');
+Route::middleware('ver-historico')->group(function (){
+    Route::get('encomendas/minhas', [EncomendaController::class, 'minhasEncomendas'])->name('encomendas.minhas');
+});
 
 Route::get('/encomendas/{encomenda}/pdf', [PdfController::class, 'index'])->name('pdf.index');
 
-Route::get('encomendas/statistics', [EncomendaController::class, 'statistics'])->name('encomendas.statistics');
+Route::middleware('admin')->group(function ()
+{
+    Route::get('encomendas/statistics', [EncomendaController::class, 'statistics'])->name('encomendas.statistics');
+});
 
 
 

@@ -17,11 +17,11 @@ class PdfController extends Controller
 
 
 
-        $tshirtsfilter = Tshirt::all()->where('encomenda_id', $encomenda['id']);
+        $tshirtsfilter = Tshirt::all()->where('order_id', $encomenda['id']);
 
-        $cliente = Cliente::all()->where('id',$encomenda['cliente_id']);
+        $cliente = Cliente::all()->where('id',$encomenda['customer_id']);
 
-        $user= User::select('name','email')->where('id',$encomenda['cliente_id'])->get();
+        $user= User::select('name','email')->where('id',$encomenda['customer_id'])->get();
 
         $cliente = $cliente->toArray();
 

@@ -39,6 +39,10 @@ class EncomendaController extends Controller
             $encomendaQuery->where('date', $filterDate);
         }
 
+        if($request->user()->user_type === 'E'){
+            $encomendaQuery->whereIN('status', ['pending', 'paid']);
+        }
+
         $encomendas = $encomendaQuery->paginate(5);
         return view('encomendas.index', compact('encomendas', 'filterStatus', 'filterNome', 'filterDate'));
 

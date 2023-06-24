@@ -13,8 +13,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var ctx = document.getElementById('myChart2').getContext('2d');
-        var myChart = new Chart(ctx, {
+        var chart = document.getElementById('myChart2').getContext('2d');
+        var myChart = new Chart(chart, {
             type: 'bar',
             data: {
                 labels: {!! json_encode($years) !!},
@@ -36,8 +36,8 @@
         });
     </script>
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        var chart = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(chart, {
             type: 'bar',
             data: {
                 labels: {!! json_encode($status) !!},

@@ -93,7 +93,16 @@ class CatalogoController extends Controller
         return view('catalogo.edit', compact('estampa', 'estampas'));
     }
 
+<<<<<<< HEAD
     public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
+=======
+
+    public function update (EstampaRequest $request, Estampa $estampa): RedirectResponse
+    
+
+    /*public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
+
+>>>>>>> f323cea975df3f6cd9f3e87b148c58874af63d29
     {
         $formData = $request->validated();
         $novaEstampa = DB::transaction(function () use ($formData, $estampa, $request) {
