@@ -3,24 +3,18 @@
 @endphp
 
 
-<table class="table">
-    <thead class="table-dark">
-        <tr>
-            <th>Size</th>
-            <th>Photo</th>
-            <th>Size</th>
-            <th>Quantity</th>
-            <th>Color</th>
-            <th>Price per</th>
-            <th>SubTotal</th>
-            <th></th>
-            <th></th>
-            <th class="button-icon-col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($encomendas->tshirts as $tshirt)
-            <td>{{$tshirt->size}}</td>
-        @endforeach
-    </tbody>
-</table>
+<div class="mb-3 form-floating">
+    <select class="form-control @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
+        <option value="pending" {{ old('status', $encomenda->status) === 'pending' ? 'selected' : '' }}>Pending</option>
+        <option value="paid" {{ old('status', $encomenda->status) === 'paid' ? 'selected' : '' }}>Paid</option>
+        <option value="closed" {{ old('status', $encomenda->status) === 'closed' ? 'selected' : '' }}>Closed</option>
+        <option value="canceled" {{ old('status', $encomenda->status) === 'canceled' ? 'selected' : '' }}>Canceled</option>
+    </select>
+    <label for="inputStatus" class="form-label">Status</label>
+    @error('status')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
+

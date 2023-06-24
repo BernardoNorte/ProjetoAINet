@@ -50,6 +50,12 @@
                     </button>
                 </form>
             </td>
+            <td class="button-icon-col">
+                <a href="{{ route('pdf.index', ['encomenda' => $encomenda]) }}" class="btn btn-primary" target="_blank">
+                    <i class="far fa-file-pdf"></i>
+                </a>
+            </td>
+
         </tr>
         @endforeach
     </tbody>

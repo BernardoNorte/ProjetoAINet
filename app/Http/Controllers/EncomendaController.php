@@ -6,6 +6,7 @@ use App\Models\Encomenda;
 use App\Models\Tshirt;
 use App\Models\Cliente;
 use App\Models\User;
+use App\Models\PdfController;
 use Illuminate\Http\Request;
 use PDF;
 use Mail;
@@ -91,6 +92,9 @@ class EncomendaController extends Controller
             ->with('tshirt', $tshirts);
     }
 
-    
+    public function __construct()
+    {
+        $this->authorizeResource(Encomenda::class, 'encomenda');
+    }
 
 }
