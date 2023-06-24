@@ -54,7 +54,10 @@ Auth::routes(['verify' => true]);
 
 Route::delete('clientes/{cliente}/photo', [ClienteController::class, 'destroy_foto'])->name('clientes.foto.destroy');
 Route::delete('users/{user}/photo', [UserController::class, 'destroy_foto'])->name('users.foto.destroy');
-Route::delete('catalogo/{estampa}/image', [CatalogoController::class, 'destroy_image'])->name('estampas.image.destroy');
+Route::delete('catalogo/{estampa}/image', [CatalogoController::class, 'destroy_image'])->name('catalogo.image.destroy');
+//Route::delete('/catalogo/destroy/{id}', [CatalogoController::class, 'destroy'])->name('catalogo.destroy');
+
+
 
 
 Route::get('tshirts', [TshirtController::class, 'index'])->name('tshirts.index');

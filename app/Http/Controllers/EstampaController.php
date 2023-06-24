@@ -6,6 +6,8 @@ use App\Models\Estampa;
 use App\Http\Requests\EstampaPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class EstampaController extends Controller
 {
@@ -41,5 +43,28 @@ class EstampaController extends Controller
             ->with('alert-msg', 'estampa "' . $estampa->nome . '" foi alterado com sucesso!')
             ->with('alert-type', 'success');
     }
+
+    public function destroy(Estampa $estampa): RedirectResponse
+{
+    try {
+        $estampa->delete();
+
+        // Remove a imagem associada à estampa, se existir
+        if ($estampa->image_url) {
+            Storage::delete('public/tshirt_images/' . $estampa->image_url);
+        }
+
+        $htmlMessage = "Estampa #{$estampa->id} \"{$estampa->name}\" foi apagada com sucesso!";
+        return redirect()->route('catalogo.index')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+    } catch (\Exception $error) {
+        $url = route('catalogo.show', ['id' => $estampa->id]);
+        $htmlMessage = "Não foi possível apagar a estampa <a href='$url'>#{$estampa->id}</a> \"{$estampa->name}\" porque ocorreu um erro!";
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'danger');
+    }
+}
 
 }
