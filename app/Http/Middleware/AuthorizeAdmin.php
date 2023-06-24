@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class UsarCarrinho
+class AuthorizeAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,12 @@ class UsarCarrinho
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user() && Auth::user()->user_type !== 'C')
+        if(Auth::user() && Auth::user()->user_type !== 'A')
         {
             return $request->expectsJson()
                 ? abort(403, 'You are not allowed')
                 :redirect()->route('root')
-                ->with('alert-msg', 'You cannot use the cart!')
+                ->with('alert-msg', 'You cannot see the statistics!')
                 ->with('alert-type', 'danger');
         }
         return $next($request);
