@@ -25,7 +25,7 @@ class EncomendaPolicy
 
     public function update(User $user): bool
     {
-        if ($user->user_type == 'E' )
+        if (($user->user_type == 'E') || ($user->user_type == 'A'))
         {
             return true;
         }

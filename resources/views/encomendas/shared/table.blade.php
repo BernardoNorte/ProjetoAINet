@@ -14,7 +14,9 @@
             <th>Status</th>
             <th class="button-icon-col"></th>
             <th class="button-icon-col"></th>
-            <th>PDF</th>
+            @if ((Auth::user()->user_type ?? '') == 'C')
+                <th>PDF</th>
+            @endif
             <th>Details</th>
 
         </tr>
@@ -40,11 +42,13 @@
             <td class="button-icon-col"><a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}"
                     class="btn btn-dark"><i class="fas fa-edit"></i></a>
             </td>
-            <td class="button-icon-col">
-                <a href="{{ route('pdf.index', ['encomenda' => $encomenda]) }}" class="btn btn-primary" target="_blank">
-                    <i class="far fa-file-pdf"></i>
-                </a>
-            </td>
+            @if ((Auth::user()->user_type ?? '') == 'C')
+                <td class="button-icon-col">
+                    <a href="{{ route('pdf.index', ['encomenda' => $encomenda]) }}" class="btn btn-primary" target="_blank">
+                        <i class="far fa-file-pdf"></i>
+                    </a>
+                </td>
+            @endif
 
         </tr>
         @endforeach

@@ -19,26 +19,27 @@ use Illuminate\Http\RedirectResponse;
 class EncomendaController extends Controller
 
 {
-    public function index(): View
+    public function index(Request $request): View
     {
 
-        $filterByID = $request->customer_id ?? 0;
-        $filterByStatus = $encomenda->status ?? '';
-        $filterByDate = $encomenda->date ?? '';
+        $filterStatus = $request->inputStatus ?? '';
+        $filterNome = $request->nome ?? '';
+        $filterDate = $request->date ?? '';
         $encomendaQuery = Encomenda::query();
-        if ($filterByID !== null) {
-            $encomendaQuery->where('customer_id', $filterByID);
+
+        if ($filterStatus !== '') {
+            $encomendaQuery->where('status', $filterStatus);
+        }
+        if ($filterNome !== ''){
+            $userIds = User::where('name', 'like', "%$filterNome%")->pluck('id');
+            $encomendaQuery->whereIntegerInRaw('customer_id', $userIds);
+        }
+        if ($filterDate !== ''){
+            $encomendaQuery->where('date', $filterDate);
         }
 
-        if ($filterByStatus !== '') {
-            $encomendaQuery->where('status', 'like', "%$filterByStatus%");
-        }
-        if ($filterByDate !== '') {
-            $encomendaQuery->whereDate('date', $filterByDate);
-        }
-        $encomendas = Encomenda::paginate(5);
-        return view('encomendas.index', compact('encomendas', 'filterByID', 'filterByStatus', 'filterByDate'))
-            ->with('filterByDate', $filterByDate);
+        $encomendas = $encomendaQuery->paginate(5);
+        return view('encomendas.index', compact('encomendas', 'filterStatus', 'filterNome', 'filterDate'));
 
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ClientePost;
@@ -19,15 +20,19 @@ class ClienteController extends Controller
 {
     public function index(Request $request): View
     {
-        $filterByNome = $request->nome ?? '';
+        $filterNome = $request->nome ?? '';
         $clienteQuery = Cliente::query();
-        if ($filterByNome !== ''){
-            $clienteIds = cliente::where('name', 'like', "%$filterByNome%")->pluck('id');
-            $clienteQuery->whereIntegerInRaw('id', $clienteIds);
+
+        if ($filterNome !== '') {
+            $userIds = User::where('name', 'like', "%$filterNome%")->pluck('id');
+            $clienteQuery->whereIn('id', $userIds);
         }
-        $clientes = $clienteQuery->paginate(5);
-        return view('clientes.index', compact('clientes', 'filterByNome'));
+
+        $clientes = $clienteQuery->with('user')->paginate(5);
+
+        return view('clientes.index', compact('clientes', 'filterNome'));
     }
+
 
     public function edit(Cliente $cliente): View
     {

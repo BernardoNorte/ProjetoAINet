@@ -15,8 +15,31 @@
             <div class="flex-grow-1 pe-2">
                 <div class="d-flex justify-content-between">
                     <div class="mb-3 me-2 flex-grow-1 form-floating">
-                        <input type="number" class="form-control" name="id" id="inputID" value="{{ old('id', $filterByID) }}">
-                        <label for="inputID" class="form-label">Filter by Client ID</label>
+                        <select id="inputStatus" class="form-select @error('inputStatus') is-invalid @enderror" name="inputStatus" required>
+                            <option value="pending" {{ old('status', 'pending') == 'pending' ? 'selected' : '' }} selected>Pending</option>
+                            <option value="paid" {{ old('status', 'paid') == 'paid' ? 'selected' : '' }}>Paid</option>
+                            <option value="closed" {{ old('status', 'closed') == 'closed' ? 'selected' : '' }}>Closed</option>
+                            <option value="canceled" {{ old('status', 'canceled') == 'canceled' ? 'selected' : '' }}>Canceled</option>
+                        </select>
+                        <label for="inputStatus" class="form-label">Filter by Status</label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-grow-1 pe-2">
+                <div class="d-flex justify-content-between">
+                    <div class="mb-3 me-2 flex-grow-1 form-floating">
+                        <input type="text" class="form-control" name="nome" id="inputNome"
+                            value="{{ old('name', $filterNome) }}">
+                        <label for="inputNome" class="form-label">Filter By Name</label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-grow-1 pe-2">
+                <div class="d-flex justify-content-between">
+                    <div class="mb-3 me-2 flex-grow-1 form-floating">
+                        <input type="date" class="form-control" name="date" id="inputDate"
+                            value="{{ old('date', $filterDate) }}">
+                        <label for="inputDate" class="form-label">Filter By Date</label>
                     </div>
                 </div>
             </div>
@@ -30,7 +53,7 @@
             'encomendas' => $encomendas
         ])
     <div>
-        {{ $encomendas->links() }}
+        {{ $encomendas->withQueryString()->links() }}
     </div>
 @endsection
 
