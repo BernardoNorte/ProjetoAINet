@@ -19,12 +19,14 @@
         <div class="card">
             <div class="card-body">
                 <div class="dropdown" style="float:right;">
-                    <label for="inputColor" class="form-label">Color</label>
-                    <select class="form-control" name="cor_codigo" id="inputColor" required>
-                        @foreach($cores as $cor)
-                            <option value="{{$cor->code}}" selected>{{ $cor->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="mb-3 form-floating">
+                        <select class="form-control" name="cor_codigo" id="inputColor" required>
+                            @foreach($cores as $cor)
+                                <option value="{{$cor->code}}" selected>{{ $cor->name }}</option>
+                            @endforeach
+                        </select>
+                        <label for="inputColor" class="form-label">Color</label>
+                    </div>
                 </div>
             </div>
                 <h1 class="text-center">{{ $item->name }}</h1>
@@ -45,18 +47,18 @@
             <div class="form-group">
                 <div class="form-group">
                 <div class="mb-3 form-floating">
-                    <label for="inputSize" class="form-label">Size</label>
                     <select class="form-control" name="size" id="inputSize" required>
                         <option value="S" selected>S</option>
                         <option value="M">M</option>
                         <option value="L">L</option>
                         <option value="XL">XL</option>
                     </select>
+                    <label for="inputSize" class="form-label">Size</label>
                 </div>
             </div>
                 <div class="form-group">
-                    <label for="exampleFormControlSelect2">Quantity</label>
                     <input class="form-control" type="number" id="inputQuantity" name="quantity" min="1" max="99" value="1" required>
+                    <label for="exampleFormControlSelect2">Quantity</label>
                 </div>
             </div>
             <div class="text-center">
