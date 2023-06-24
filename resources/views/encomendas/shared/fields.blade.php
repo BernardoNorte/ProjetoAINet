@@ -2,28 +2,47 @@
     $disabledStr = $readonlyData ?? false ? 'disabled' : '';
 @endphp
 
-
+@if($showorderID)
+    <div class="mb-3 form-floating">
+        <input type="number" class="form-control @error('number') is-invalid @enderror" name="number" id="inputNumber"
+            {{ $disabledStr }} value="{{ old('id', $encomenda->id) }}">
+        <label for="inputNumber" class="form-label">Order ID</label>
+        @error('number')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+@endif
+@if($showTotalPrice)
+    <div class="mb-3 form-floating">
+        <input type="number" class="form-control @error('total_price') is-invalid @enderror" name="total_price" id="inputTotalPrice"
+            {{ $disabledStr }} value="{{ old('total_price', $encomenda->total_price) }}">
+        <label for="inputTotalPrice" class="form-label">Total Price </label>
+        @error('number')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+@endif
 
 <table class="table">
     <thead>
         <tr>
-            <th>Order ID</th>
             <th>Quantity</th>
             <th>Price Per</th>
             <th>Subtotal</th>
             <th>Size</th>
-            <th>Status</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($tshirts as $tshirt)
         <tr>
-            <td>{{ $encomenda->id }}
             <td>{{ $tshirt->qty }}</td>
             <td>{{ $tshirt->unit_price }} €</td>
             <td>{{ $tshirt->sub_total }} €</td>
-            <td>{{ $tshirt->size }}</td>~
-            <td>{{ $encomenda->status }}</td>
+            <td>{{ $tshirt->size }}</td>
         </tr>
         @endforeach
     </tbody>

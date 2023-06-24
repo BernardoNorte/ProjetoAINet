@@ -10,6 +10,7 @@ use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\TshirtController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarrinhoController;
+use App\Http\Controllers\EstatisticasController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 
 Auth::routes();
@@ -70,6 +71,9 @@ Route::middleware('usar-carrinho')->group(function () {
 Route::get('encomendas/minhas', [EncomendaController::class, 'minhasEncomendas'])->name('encomendas.minhas');
 
 Route::get('/encomendas/{encomenda}/pdf', [PdfController::class, 'index'])->name('pdf.index');
+
+Route::get('encomendas/statistics', [EncomendaController::class, 'statistics'])->name('encomendas.statistics');
+
 
 
 

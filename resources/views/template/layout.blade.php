@@ -49,6 +49,13 @@
                         @if ((Auth::user()->user_type ?? '') == 'A')
                             <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : ''}}" href="{{ route('users.index') }}">Employees</a></li>
                         @endif
+                        @if ((Auth::user()->user_type ?? '') == 'A')
+                            <a class="nav-link {{ Route::currentRouteName() == 'encomendas.statistics' ? 'active' : '' }}"
+                                href="{{ route('encomendas.statistics') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-text"></i></div>
+                                Statistics
+                            </a>
+                        @endif
                     </ul>
         @guest
             <ul class="navbar-nav ms-auto me-1 me-lg-3">

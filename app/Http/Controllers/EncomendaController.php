@@ -15,6 +15,7 @@ use Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class EncomendaController extends Controller
 
@@ -89,6 +90,23 @@ class EncomendaController extends Controller
         
         return view('encomendas.show', compact('encomenda', 'tshirts'));
     }
+
+    public function statistics(): View
+    {
+        $ordersByYear = Encomenda::select(
+            DB::raw("YEAR(created_at) as year"),
+            DB::raw("COUNT(*) as total_orders")
+        )
+        ->groupBy(DB::raw("YEAR(created_at)"))
+        ->orderBy(DB::raw("YEAR(created_at)"))
+        ->get();
+
+        $years = $ordersByYear->pluck('year')->all();
+        $totalOrders = $ordersByYear->pluck('total_orders')->all();
+
+        return view('encomendas.statistics', compact('years', 'totalOrders'));
+    }
+
 
 
     public function __construct()

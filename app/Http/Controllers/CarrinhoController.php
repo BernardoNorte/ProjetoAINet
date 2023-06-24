@@ -20,7 +20,7 @@ use PDF;
 
 class CarrinhoController extends Controller
 {
-    public function show(): View
+    public function show(Request $request): View
     {
 
         $cart = session('cart', []);
@@ -58,6 +58,7 @@ class CarrinhoController extends Controller
                     'total' => $total_price,
                 ];
             }
+
             $request->session()->put('cart', $cart);
             $alertType = 'success';
             //$url = route('estampas.show', ['estampa' => $estampa]);

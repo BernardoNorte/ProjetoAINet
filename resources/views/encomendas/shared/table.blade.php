@@ -2,7 +2,6 @@
     <thead>
         <tr>
             <th>Order ID</th>
-
             <th>Client ID</th>
             <th>Date</th>
             <th>Total Price</th>
@@ -13,7 +12,9 @@
             <th>Payment Reference</th>
             <th>Status</th>
             <th class="button-icon-col"></th>
-            <th class="button-icon-col"></th>
+            @if ((Auth::user()->user_type ?? '') != 'C')
+                <th class="button-icon-col"></th>
+            @endif
             @if ((Auth::user()->user_type ?? '') == 'C')
                 <th>PDF</th>
             @endif
@@ -39,9 +40,11 @@
             <td class="button-icon-col"><a href="{{ route('encomendas.show', ['encomenda' => $encomenda]) }}"
                     class="btn btn-secondary"><i class="fas fa-eye"></i></a>
             </td>
-            <td class="button-icon-col"><a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}"
-                    class="btn btn-dark"><i class="fas fa-edit"></i></a>
-            </td>
+            @if ((Auth::user()->user_type ?? '') != 'C')
+                <td class="button-icon-col"><a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}"
+                        class="btn btn-dark"><i class="fas fa-edit"></i></a>
+                </td>
+            @endif
             @if ((Auth::user()->user_type ?? '') == 'C')
                 <td class="button-icon-col">
                     <a href="{{ route('pdf.index', ['encomenda' => $encomenda]) }}" class="btn btn-primary" target="_blank">
