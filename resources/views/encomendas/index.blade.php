@@ -17,7 +17,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="mb-3 me-2 flex-grow-1 form-floating">
                             <select id="inputStatus" class="form-select @error('inputStatus') is-invalid @enderror" name="inputStatus" required>
-                                <option value="pending" {{ old('status', 'pending') == 'pending' ? 'selected' : '' }} selected>Pending</option>
+                                <option value="pending" {{ old('status', 'pending') == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="paid" {{ old('status', 'paid') == 'paid' ? 'selected' : '' }}>Paid</option>
                                 <option value="closed" {{ old('status', 'closed') == 'closed' ? 'selected' : '' }}>Closed</option>
                                 <option value="canceled" {{ old('status', 'canceled') == 'canceled' ? 'selected' : '' }}>Canceled</option>
