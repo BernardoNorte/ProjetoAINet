@@ -64,7 +64,7 @@ Route::middleware('usar-carrinho')->group(function () {
     Route::delete('cart', [CarrinhoController::class, 'destroy'])->name('cart.destroy');
     Route::put('cart/{estampa}', [CarrinhoController::class, 'updateCart'])->name('cart.update');
     Route::post('cart/{estampa}', [CarrinhoController::class, 'addToCart'])->name('cart.add');
-    Route::delete('cart/{estampa}/{size}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
+    Route::delete('cart/{estampa}/{size}/{color}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
 });
 
 Route::get('encomendas/minhas', [EncomendaController::class, 'minhasEncomendas'])->name('encomendas.minhas');

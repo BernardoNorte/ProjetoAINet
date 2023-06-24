@@ -40,7 +40,7 @@
                     <td>{{ $row['price_per'] }} €</td>
                     <td>{{ $row['total'] }} €</td>
                     <td class="button-icon-col">
-                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id'], 'size' => $row['size']]) }}">
+                        <form method="POST" action="{{ route('cart.remove', ['estampa' => $row['id'], 'size' => $row['size'], 'color' => $row['color']]) }}">
                             @csrf 
                             @method('DELETE')
                             <button type="submit" name="destroyCartTshirt" class="btn btn-danger">

@@ -43,7 +43,7 @@ class CarrinhoController extends Controller
             $color = $request->input('cor_codigo');
             $price_per = $request->session()->get('unit_price_catalog');
             $total_price = $quantity * $price_per;
-            $cartID = $estampa->id . '-' . $size;
+            $cartID = $estampa->id . '-' . $size . '-' . $color;
             if(array_key_exists($cartID, $cart))
             {
                 $cart[$cartID]['quantity'] += $quantity;
@@ -72,12 +72,12 @@ class CarrinhoController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function destroyCartTshirt(Request $request, Estampa $estampa, $size)
+    public function destroyCartTshirt(Request $request, Estampa $estampa, $size, $color)
     {
         $cart = $request->session()->get('cart', []);
 
         foreach ($cart as $cartID => $cartItem) {
-            if ($cartItem['id'] === $estampa->id && $cartItem['size'] === $size) {
+            if ($cartItem['id'] === $estampa->id && $cartItem['size'] === $size && $cartItem['color'] === $color) {
                 unset($cart[$cartID]);
             }
         }

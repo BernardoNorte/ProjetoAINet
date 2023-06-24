@@ -88,10 +88,7 @@ class CatalogoController extends Controller
         return view('catalogo.edit', compact('estampa', 'estampas'));
     }
 
-    public function __construct()
-    {
-        $this->authorizeResource(Catalogo::class, 'catalogo');
-    }
+    
 
     /*public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
     {
