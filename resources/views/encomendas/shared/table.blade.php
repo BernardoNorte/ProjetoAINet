@@ -14,7 +14,6 @@
             <th>Status</th>
             <th class="button-icon-col"></th>
             <th class="button-icon-col"></th>
-            <th class="button-icon-col"></th>
             <th>PDF</th>
             <th>Details</th>
 
@@ -40,15 +39,6 @@
             </td>
             <td class="button-icon-col"><a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}"
                     class="btn btn-dark"><i class="fas fa-edit"></i></a>
-            </td>
-            <td class="button-icon-col">
-                <form method="POST" action="{{ route('encomendas.destroy', ['encomenda' => $encomenda]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" name="delete" class="btn btn-danger">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </form>
             </td>
             <td class="button-icon-col">
                 <a href="{{ route('pdf.index', ['encomenda' => $encomenda]) }}" class="btn btn-primary" target="_blank">

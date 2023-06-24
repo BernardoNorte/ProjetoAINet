@@ -17,4 +17,18 @@ class EncomendaPolicy
        }
        return false;
     }
+
+    public function view(User $user): bool
+    {
+        return true;
+    }
+
+    public function update(User $user): bool
+    {
+        if ($user->user_type == 'E' )
+        {
+            return true;
+        }
+        return false;
+    }
 }

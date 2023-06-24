@@ -14,8 +14,10 @@
     <div>
     @include('encomendas.shared.fields', ['encomenda' => $encomenda, 'readonlyData' => true])
     </div>
-    <div class="my-4 d-flex justify-content-end">
-        <a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}" class="btn btn-secondary ms-3">Edit Order</a>
-    </div>
+    @if ((Auth::user()->user_type ?? '') == 'E')
+        <div class="my-4 d-flex justify-content-end">
+            <a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}" class="btn btn-secondary ms-3">Edit Order</a>
+        </div>
+    @endif
 
 @endsection

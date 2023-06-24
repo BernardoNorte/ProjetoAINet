@@ -24,8 +24,6 @@ Route::post('encomendas', [EncomendaController::class, 'store'])->name('encomend
 Route::get('encomendas/{encomenda}/edit', [EncomendaController::class, 'edit'])->name('encomendas.edit');
 Route::put('encomendas/{encomenda}', [EncomendaController::class, 'update'])->name('encomendas.update');
 
-Route::delete('encomendas/{encomenda}', [EncomendaController::class, 'destroy'])->name('encomendas.destroy');
-
 Route::get('encomendas/{encomenda}/show', [EncomendaController::class, 'show'])->name('encomendas.show');
 //Route::resource('encomendas', EncomendaController::class);
 

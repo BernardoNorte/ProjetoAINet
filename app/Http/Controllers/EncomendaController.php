@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Encomenda;
+use App\Models\Estampa;
 use App\Models\Tshirt;
+use App\Models\Cor;
 use App\Models\Cliente;
 use App\Models\User;
 use App\Models\PdfController;
@@ -69,7 +71,9 @@ class EncomendaController extends Controller
 
     public function edit(Encomenda $encomenda): View
     {
-        return view('encomendas.edit')->withEncomenda($encomenda);
+        $tshirts = Tshirt::where('order_id', $encomenda->id)->get();
+        
+        return view('encomendas.edit', compact('encomenda', 'tshirts'));
     }
 
     public function update(Request $request, Encomenda $encomenda): RedirectResponse
@@ -78,19 +82,13 @@ class EncomendaController extends Controller
         return redirect()->route('encomendas.index');
     }
 
-    public function destroy(Encomenda $encomenda): RedirectResponse
-    {
-        $encomenda->delete();
-        return redirect()->route('encomendas.index');
-    }
-
     public function show(Request $request, Encomenda $encomenda): View
     {
-        $tshirts = Tshirt::all();
-        return view('encomendas.show')
-            ->with('encomenda', $encomenda)
-            ->with('tshirt', $tshirts);
+        $tshirts = Tshirt::where('order_id', $encomenda->id)->get();
+        
+        return view('encomendas.show', compact('encomenda', 'tshirts'));
     }
+
 
     public function __construct()
     {
