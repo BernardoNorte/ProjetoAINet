@@ -11,7 +11,6 @@ class EstampaController extends Controller
 {
     public function index(){
         $estampas = Estampa::paginate(10);
-        //dd($estampas);
         return view('estampas.index')->withEstampas($estampas);
     }
 
@@ -38,7 +37,7 @@ class EstampaController extends Controller
         $estampa->save();
 
         return redirect()->route('estampas.index')
-            ->with('alert-msg', 'estampa "' . $estampa->nome . '" foi alterado com sucesso!')
+            ->with('alert-msg', 'Tshirt "' . $estampa->nome . '" was changed with success!')
             ->with('alert-type', 'success');
     }
 

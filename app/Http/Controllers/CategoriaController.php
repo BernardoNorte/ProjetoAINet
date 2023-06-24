@@ -29,7 +29,7 @@ class CategoriaController extends Controller
         $categoria->save();
 
         return redirect()->route('categorias.index')
-            ->with('alert-msg', 'categoria alterada com sucesso foi alterado com sucesso!')
+            ->with('alert-msg', 'Category changed with success!')
             ->with('alert-type', 'success');
     }
 }

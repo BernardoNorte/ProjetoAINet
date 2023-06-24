@@ -33,7 +33,7 @@ class PrecosController extends Controller
         $precos->save();
 
         return redirect()->route('precos.index')
-            ->with('alert-msg', 'Precos foram alterados alterado com sucesso!')
+            ->with('alert-msg', 'Prices was changed with success!')
             ->with('alert-type', 'success');
     }
 
@@ -50,7 +50,7 @@ class PrecosController extends Controller
         $precos->save();
 
         return redirect()->route('precos.index')
-            ->with('alert-msg', 'Precos foram resetados com sucesso!')
+            ->with('alert-msg', 'Prices were reset with success!')
             ->with('alert-type', 'success');
     }
 }

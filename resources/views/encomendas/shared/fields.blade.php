@@ -12,6 +12,7 @@
             <th>Price Per</th>
             <th>Subtotal</th>
             <th>Size</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +22,8 @@
             <td>{{ $tshirt->qty }}</td>
             <td>{{ $tshirt->unit_price }} €</td>
             <td>{{ $tshirt->sub_total }} €</td>
-            <td>{{ $tshirt->size }}</td>
+            <td>{{ $tshirt->size }}</td>~
+            <td>{{ $encomenda->status }}</td>
         </tr>
         @endforeach
     </tbody>
@@ -49,6 +51,7 @@
 @else 
     <div class="mb-3 form-floating">
         <select class="form-control @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
+            <option value="pending" {{ old('status', $encomenda->status) === 'pending' ? 'selected' : '' }} >Pending</option>
             <option value="paid" {{ old('status', $encomenda->status) === 'paid' ? 'selected' : '' }}>Paid</option>
             <option value="closed" {{ old('status', $encomenda->status) === 'closed' ? 'selected' : '' }}>Closed</option>
             <option value="canceled" {{ old('status', $encomenda->status) === 'canceled' ? 'selected' : '' }}>Canceled</option>

@@ -44,16 +44,16 @@ class ClienteRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' =>  'O nome é obrigatório',
-            'email.required' => 'O email é obrigatório',
-            'email.email' =>    'O formato do email é inválido',
-            'email.unique' =>   'O email tem que ser único',
-            'nif.integer' =>    'O nif tem que ser inteiro',
-            'nif.unique' => 'O nif tem que ser unico',
-            'default_payment_type.in' => 'O tipo de pagamento tem de ser MC, Paypal, Visa',
-            'file_foto.image' => 'O ficheiro com a foto não é uma imagem',
-            'file_foto.size' => 'O tamanho do ficheiro com a foto tem que ser inferior a 8 Mb',
-            'password_inicial.required' => 'A password inicial é obrigatória',
+            'name.required' =>  'The name is required',
+            'email.required' => 'The email is required',
+            'email.email' =>    'Not valid email format',
+            'email.unique' =>   'Email must be unique',
+            'nif.integer' =>    'NIF has to be an integer',
+            'nif.unique' => 'NIF has to be unique',
+            'default_payment_type.in' => 'Pyament type has to be MC, Paypal, Visa',
+            'file_foto.image' => 'The file with the photo is not an image',
+            'file_foto.size' => 'File size must be lower than 8 Mb',
+            'password_inicial.required' => 'Initial password is required',
         ];
     }
 }

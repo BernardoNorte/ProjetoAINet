@@ -97,7 +97,7 @@ class UserController extends Controller
         });
         $url = route('users.show', ['user' => $user]);
         $htmlMessage = "user <a href='$url'>#{$user->id}</a>
-                        <strong>\"{$user->name}\"</strong> foi alterado com sucesso!";
+                        <strong>\"{$user->name}\"</strong> was changed with success!";
         return redirect()->route('users.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
@@ -109,14 +109,14 @@ class UserController extends Controller
                 destroy_foto($user);
                 $user->delete();
                 $htmlMessage = "User #{$user->id}
-                        <strong>\"{$user->name}\"</strong> foi apagado com sucesso!";
+                        <strong>\"{$user->name}\"</strong> was removed with success!";
                 return redirect()->route('users.index')
                     ->with('alert-msg', $htmlMessage)
                     ->with('alert-type', 'success');
         } catch (\Exception $error) {
             $url = route('users.show', ['user' => $user]);
-            $htmlMessage = "Não foi possível apagar o user <a href='$url'>#{$user->id}</a>
-                        <strong>\"{$user->name}\"</strong> porque ocorreu um erro!";
+            $htmlMessage = "It was not possible to remove user <a href='$url'>#{$user->id}</a>
+                        <strong>\"{$user->name}\"</strong> there was an error!";
             $alertType = 'danger';
         }
         return back()

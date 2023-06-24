@@ -67,17 +67,15 @@ class CatalogoController extends Controller
     }
     public function show($id)
     {
-        // Recupera o item do catálogo com base no ID
+        
         $item = Estampa::find($id);
         $cores = Cor::all();
 
-        // Verifiqua se o item foi encontrado
         if (!$item) {
-            // Redireciona para uma página de erro ou retorne uma resposta adequada
+            
             abort(404, 'Item not found');
         }
 
-        // Retorna a view com os detalhes do item
         return view('catalogo.show', compact('item','cores'));
     }
 
