@@ -79,6 +79,13 @@ class CatalogoController extends Controller
         return view('catalogo.show', compact('item','cores'));
     }
 
+    public function add($id)
+    {
+        $estampa = Estampa::find($id);
+        $estampas = Estampa::all();
+        return view('catalogo.create', compact('estampa', 'estampas'));
+    }
+
     public function edit($id)
     {
         $estampa = Estampa::find($id);
@@ -86,16 +93,19 @@ class CatalogoController extends Controller
         return view('catalogo.edit', compact('estampa', 'estampas'));
     }
 
+<<<<<<< HEAD
+    public function update (EstampaRequest $request, Estampa $estampa): RedirectResponse
+=======
     
 
     /*public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
+>>>>>>> 5895d86098385cd3ca9377966837631a5f8d30ea
     {
         $formData = $request->validated();
         $novaEstampa = DB::transaction(function () use ($formData, $estampa, $request) {
-            $estampa->categoria->id = $formData['category_id'];
             $estampa->name = $formData['name'];
             $estampa->description = $formData['description'];
-            
+            $estampa->image_url = 'default_image.png';
             
             $estampa->save();
             
@@ -118,9 +128,9 @@ class CatalogoController extends Controller
         return redirect()->route('catalogo.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
-    }*/
+    }
 
-    public function update(EstampaRequest $request, Estampa $estampa)
+    public function store(EstampaRequest $request, Estampa $estampa)
     {
 
         $validated_data = $request->validated();
@@ -141,9 +151,22 @@ class CatalogoController extends Controller
             ->with('alert-type', 'success');
     }
 
-    public function destroy(Estampa $estampa): RedirectResponse
-    {
+/*    public function destroy($id)
+{
+    $estampa = Estampa::find($id);
+
+    if ($estampa) {
+        // Exclua o registro
+        $estampa->delete();
+
+        // Redirecione para a página desejada após a exclusão
+        return redirect()->route('catalogo.index')->with('success', 'Estampa excluída com sucesso.');
     }
+
+    // Caso o registro não seja encontrado, retorne uma resposta adequada
+    return redirect()->route('catalogo.index')->with('error', 'Estampa não encontrada.');
+}*/
+
 
     public function destroy_image(Estampa $estampa): RedirectResponse
     {
@@ -153,7 +176,7 @@ class CatalogoController extends Controller
             $estampa->save();
         }
 
-        return redirect()->route('catalogo.edit', ['estampa' => $estampa])
+        return redirect()->route('catalogo.edit', ['catalogo' => $estampa])
             ->with('alert-msg', 'Tshirt Photo "' . $estampa->name . '"was removed!')
             ->with('alert-type', ' Success');
     }

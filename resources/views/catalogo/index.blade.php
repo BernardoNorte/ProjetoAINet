@@ -56,11 +56,21 @@
     </div>
 </form>
 
+@php
+$firstItem = $catalogo->first();
+@endphp
+
+@if ($firstItem)
+<a class="btn btn-outline-success mt-auto" href="{{ route('catalogo.edit', ['catalogo' => $firstItem]) }}">Create new print</a>
+@endif
+
 <!-- Section -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
 @foreach ($catalogo as $item)
+        
     <div class="col mb-5">
         <div class="card h-100">
             <!-- Product image-->
@@ -90,12 +100,14 @@
                 @endif
                 @if ((Auth::user()->user_type ?? '') == 'A')
                 <div class="text-center">
+                    <a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.show', ['id' => $item->id]) }}">View</a>
                     <a class="btn btn-outline-dark mt-auto" href="{{ route('catalogo.edit', ['catalogo' => $item]) }}">Edit</a>
-                    <form class="d-inline" action="{{ route('catalogo.destroy', ['catalogo' => $item]) }}" method="POST">
+                    {{-- <form action="{{ route('catalogo.destroy', ['id' => 323]) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger mt-auto" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
-                    </form>
+                        <!-- Resto dos campos do formulário -->
+                        <button type="submit">Delete</button>
+                    </form> --}}
                 </div>
                 @endif
             </div>

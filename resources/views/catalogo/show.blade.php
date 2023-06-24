@@ -32,15 +32,16 @@
                     <img src="{{ $item->image_url ? asset('storage/tshirt_images/' . $item->image_url) : asset('img/default_img.png') }}" alt="..." width="360px" height="420px"/>
                 </div>
 
-                <h2>Price: {{session('unit_price_catalog') . " €"}}</h2>
-
-
-                <p>{{ $item->description }}</p>
-                <p>Price: {{session('unit_price_catalog') . " €"}}</p>
+                <h2 style="margin-left=5px;">Price: {{session('unit_price_catalog') . " €"}}</h2>
+                @if($item->categoria)
+                    <p style="margin-left=5px;">Category: {{ $item->categoria->name}}</p>
+                @endif
+                <p style="margin-left=5px;">Description: {{ $item->description }}</p>
 
                 <!-- Adicionar ao Carrinho -->
                 <input type="hidden" name="idEstampa" value="{{ $item->id }}">
                 <input type="hidden" name="image_url" value="{{ $item->image_url }}">
+            @if ((Auth::user()->user_type ?? '') != 'A')
             <div class="form-group">
                 <div class="form-group">
                 <div class="mb-3 form-floating">
@@ -53,7 +54,6 @@
                     </select>
                 </div>
             </div>
-
                 <div class="form-group">
                     <label for="exampleFormControlSelect2">Quantity</label>
                     <input class="form-control" type="number" id="inputQuantity" name="quantity" min="1" max="99" value="1" required>
@@ -65,6 +65,7 @@
                         <button type="submit" name="addToCart" class="btn btn-outline-dark mt-auto">Add to Cart</button>
                     </form>
             </div>
+            @endif
         </div>
     </div>
 @endsection
