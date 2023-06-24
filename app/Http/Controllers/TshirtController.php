@@ -21,7 +21,7 @@ class TshirtController extends Controller
     {
         $tshirtsfilter = Tshirt::all()->where('encomenda_id', $encomenda_id);
 
-        //$nomeEst = DB::table('tshirts')->join('estampas', 'tshirts.estampa_id', '=', 'estampas.id')->select('estampas.imagem_url')->where($id, 'estampas.id')->get();
+        
         return view('tshirts.index')->with('tshirts', $tshirtsfilter);
     }
 }

@@ -33,9 +33,9 @@ class Tshirt extends Model
         return $this->hasOne(Cor::class, 'codigo', 'id');
     }
 
-    public function encomendas(): HasOne
+    public function encomendas(): BelongsTo
     {
-        return $this->hasOne(Encomenda::class, 'order_id', 'id');
+        return $this->belongsTo(Encomenda::class, 'order_id');
     }
 
 }

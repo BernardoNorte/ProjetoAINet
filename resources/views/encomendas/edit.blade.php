@@ -27,7 +27,7 @@
     <form method="POST" action="{{ route('encomendas.update', ['encomenda' => $encomenda]) }}">
         @csrf
         @method('PUT')
-        @include('encomendas.shared.fields')
+        @include('encomendas.shared.fields', ['encomenda' => $encomenda, 'showorderID' => false, 'showTotalPrice' => false, 'readonlyData' => false])
         <div class="my-4 d-flex justify-content-end">
             <button type="submit" class="btn btn-primary" name="ok">Save</button>
             <a href="{{ route('encomendas.edit', ['encomenda' => $encomenda]) }}" class="btn btn-secondary ms-3">Cancel</a>

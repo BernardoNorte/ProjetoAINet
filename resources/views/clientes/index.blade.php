@@ -16,7 +16,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="mb-3 me-2 flex-grow-1 form-floating">
                         <input type="text" class="form-control" name="nome" id="inputNome"
-                            value="{{ old('nome', $filterByNome) }}">
+                            value="{{ old('nome', $filterNome) }}">
                         <label for="inputNome" class="form-label">Name</label>
                     </div>
                 </div>
@@ -38,6 +38,6 @@
 
     <div>
         <div>
-            {{ $clientes->links() }}
+            {{ $clientes->withQueryString()->links() }}
         </div>
 @endsection

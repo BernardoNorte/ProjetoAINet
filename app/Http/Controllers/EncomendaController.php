@@ -3,23 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Encomenda;
+use App\Models\Estampa;
 use App\Models\Tshirt;
+use App\Models\Cor;
 use App\Models\Cliente;
 use App\Models\User;
+use App\Models\PdfController;
 use Illuminate\Http\Request;
 use PDF;
 use Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class EncomendaController extends Controller
+
 {
-    public function index(): View
+    public function index(Request $request): View
     {
 
-        $encomendas = Encomenda::paginate(5);
-        return view('encomendas.index', compact('encomendas'));
+        $filterStatus = $request->inputStatus ?? '';
+        $filterNome = $request->nome ?? '';
+        $filterDate = $request->date ?? '';
+        $encomendaQuery = Encomenda::query();
+
+        if ($filterStatus !== '') {
+            $encomendaQuery->where('status', $filterStatus);
+        }
+        if ($filterNome !== ''){
+            $userIds = User::where('name', 'like', "%$filterNome%")->pluck('id');
+            $encomendaQuery->whereIntegerInRaw('customer_id', $userIds);
+        }
+        if ($filterDate !== ''){
+            $encomendaQuery->where('date', $filterDate);
+        }
+
+        $encomendas = $encomendaQuery->paginate(5);
+        return view('encomendas.index', compact('encomendas', 'filterStatus', 'filterNome', 'filterDate'));
 
     }
 
@@ -52,7 +73,9 @@ class EncomendaController extends Controller
 
     public function edit(Encomenda $encomenda): View
     {
-        return view('encomendas.edit')->withEncomenda($encomenda);
+        $tshirts = Tshirt::where('order_id', $encomenda->id)->get();
+        
+        return view('encomendas.edit', compact('encomenda', 'tshirts'));
     }
 
     public function update(Request $request, Encomenda $encomenda): RedirectResponse
@@ -61,20 +84,44 @@ class EncomendaController extends Controller
         return redirect()->route('encomendas.index');
     }
 
-    public function destroy(Encomenda $encomenda): RedirectResponse
-    {
-        $encomenda->delete();
-        return redirect()->route('encomendas.index');
-    }
-
     public function show(Request $request, Encomenda $encomenda): View
     {
-        $tshirts = Tshirt::all();
-        return view('encomendas.show')
-            ->with('encomenda', $encomenda)
-            ->with('tshirt', $tshirts);
+        $tshirts = Tshirt::where('order_id', $encomenda->id)->get();
+        
+        return view('encomendas.show', compact('encomenda', 'tshirts'));
     }
 
-    
+    public function statistics(): View
+    {
+        $AllOrdersByYear = Encomenda::select(
+            DB::raw("YEAR(created_at) as year"),
+            DB::raw("COUNT(*) as total_orders")
+        )
+        ->groupBy(DB::raw("YEAR(created_at)"))
+        ->orderBy(DB::raw("YEAR(created_at)"))
+        ->get();
+
+        $AllOrdersByStatus = Encomenda::select(
+            DB::raw("status"),
+            DB::raw("COUNT(*) as total_orders2"),
+        )
+        ->groupBy(DB::raw("status"))
+        ->orderBy(DB::raw("status"))
+        ->get();
+
+        $years = $AllOrdersByYear->pluck('year')->all();
+        $totalOrders = $AllOrdersByYear->pluck('total_orders')->all();
+        $totalOrdersByStatus = $AllOrdersByStatus->pluck('total_orders2')->all();
+        $status = $AllOrdersByStatus->pluck('status')->all();
+
+        return view('encomendas.statistics', compact('years', 'totalOrders', 'totalOrdersByStatus', 'status'));
+    }
+
+
+
+    public function __construct()
+    {
+        $this->authorizeResource(Encomenda::class, 'encomenda');
+    }
 
 }

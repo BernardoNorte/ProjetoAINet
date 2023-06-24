@@ -67,17 +67,15 @@ class CatalogoController extends Controller
     }
     public function show($id)
     {
-        // Recupera o item do catálogo com base no ID
+        
         $item = Estampa::find($id);
         $cores = Cor::all();
 
-        // Verifiqua se o item foi encontrado
         if (!$item) {
-            // Redireciona para uma página de erro ou retorne uma resposta adequada
+            
             abort(404, 'Item not found');
         }
 
-        // Retorna a view com os detalhes do item
         return view('catalogo.show', compact('item','cores'));
     }
 
@@ -95,7 +93,13 @@ class CatalogoController extends Controller
         return view('catalogo.edit', compact('estampa', 'estampas'));
     }
 
+<<<<<<< HEAD
     public function update (EstampaRequest $request, Estampa $estampa): RedirectResponse
+=======
+    
+
+    /*public function update(EstampaRequest $request, Estampa $estampa): RedirectResponse
+>>>>>>> 5895d86098385cd3ca9377966837631a5f8d30ea
     {
         $formData = $request->validated();
         $novaEstampa = DB::transaction(function () use ($formData, $estampa, $request) {

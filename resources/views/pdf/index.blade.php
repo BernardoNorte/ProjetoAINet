@@ -66,12 +66,12 @@
                 <h3></h3>
                 <pre>
 Email: {{$merged['user']['email']}}
-Referencia de Pagamento: {{$merged['encomenda']['ref_pagamento']}}
-Endereço: {{$merged['encomenda']['endereco']}}
+Referencia de Pagamento: {{$merged['encomenda']['payment_ref']}}
+Endereço: {{$merged['encomenda']['address']}}
 <br /><br />
-Data: {{$merged['encomenda']['data']}}
+Data: {{$merged['encomenda']['date']}}
 NIF: {{$merged['cliente']['nif']}}
-Estado: {{$merged['encomenda']['estado']}}
+Estado: {{$merged['encomenda']['status']}}
 </pre>
 
 
@@ -81,9 +81,9 @@ Estado: {{$merged['encomenda']['estado']}}
             </td>
             <td align="right" style="width: 40%;">
 
-                <h3>MagicShirts</h3>
+                <h3>ImagineShirt</h3>
                 <pre>
-                    MagicShirts.com
+                    ImagineShirt.com
 
                     Leiria
                     2410-124
@@ -123,10 +123,10 @@ Estado: {{$merged['encomenda']['estado']}}
             @foreach ($merged['tshirtsfilter'] as $tshirt)
             <tr>
                 <td align="right">{{$tshirt['estampa_id']}}</td>
-                <td align="right">{{$tshirt['cor_codigo']}}</td>
-                <td align="right">{{$tshirt['quantidade']}}</td>
-                <td align="right">{{$tshirt['preco_un']}}</td>
-                <td align="right">{{$tshirt['subtotal']}}</td>
+                <td align="right">{{$tshirt['color_code']}}</td>
+                <td align="right">{{$tshirt['qty']}}</td>
+                <td align="right">{{$tshirt['unit_price']}}</td>
+                <td align="right">{{$tshirt['sub_total']}}</td>
               </tr>
             @endforeach
 

@@ -20,7 +20,7 @@ use PDF;
 
 class CarrinhoController extends Controller
 {
-    public function show(): View
+    public function show(Request $request): View
     {
 
         $cart = session('cart', []);
@@ -34,16 +34,13 @@ class CarrinhoController extends Controller
             $alertType = 'warning';
             $htmlMessage = "The user is not a client or anonymous, therefore he cannot add a tshirt to the cart!";
         }else{
-            /*$clienteID = $request->user()->cliente->id;
-            $totalEstampas = DB::scalar('select count(*) from clientes_estampas where customer_id = ? and id = ?', [$alunoID, $estampa->id]);
-            $htmlMessage = "Total de estampas -> $totalEstampas";*/
             $cart = session('cart', []);
             $size = $request->input('size');
             $quantity = $request->input('quantity');
             $color = $request->input('cor_codigo');
             $price_per = $request->session()->get('unit_price_catalog');
             $total_price = $quantity * $price_per;
-            $cartID = $estampa->id;
+            $cartID = $estampa->id . '-' . $size . '-' . $color;
             if(array_key_exists($cartID, $cart))
             {
                 $cart[$cartID]['quantity'] += $quantity;
@@ -51,6 +48,7 @@ class CarrinhoController extends Controller
             }else {
                 $cart[$cartID] = [
                     'id' => $estampa->id,
+                    'cartID' => $cartID,
                     'size' => $size,
                     'quantity' => $quantity,
                     'color' => $color,
@@ -60,6 +58,7 @@ class CarrinhoController extends Controller
                     'total' => $total_price,
                 ];
             }
+
             $request->session()->put('cart', $cart);
             $alertType = 'success';
             //$url = route('estampas.show', ['estampa' => $estampa]);
@@ -71,54 +70,21 @@ class CarrinhoController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function updateCart(Request $request, Estampa $estampa)
+    public function destroyCartTshirt(Request $request, Estampa $estampa, $size, $color)
     {
         $cart = $request->session()->get('cart', []);
-        $cartID = $estampa->id;
-        $qtd = $cart[$cartID]['quantity'] ?? 0;
-        $qtd += $request->input('quantity');
-        if ($request->input('quantity') < 0){
-            $msg = 'Removed  ' . -$request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
-        } else if ($request->input('quantity') > 0){
-            $msg = 'Added ' . $request->input('quantity') . ' t-shirts "' . $estampa->name . '"';
+
+        foreach ($cart as $cartID => $cartItem) {
+            if ($cartItem['id'] === $estampa->id && $cartItem['size'] === $size && $cartItem['color'] === $color) {
+                unset($cart[$cartID]);
+            }
         }
 
-        if($qtd <= 0)
-        {
-            unset($cart[$cartID]);
-            $msg = 'Removed all t-shirts "' . $estampa->name . '"';
-        } else {
-            $cart[$cartID] = [
-                'id' => $estampa->id,
-                'size' => $cart[$cartID]['size'],
-                'quantity' => $qtd,
-                'color' => $cart[$cartID]['color'],
-                'name' => $estampa->name,
-                'image' => $estampa->image_url,
-                'price_per' => $cart[$cartID]['price_per'],
-                'total' => $cart[$cartID]['total'],
-            ];
-        }
         $request->session()->put('cart', $cart);
-        return back()
-            ->with('alert-msg', $msg)
-            ->with('alert-type', 'success');
-    }
 
-    public function destroyCartTshirt(Request $request, Estampa $estampa)
-    {
-        $cart = $request->session()->get('cart', []);
-        $cartID = $estampa->id;
-        if (array_key_exists($cartID, $cart)){
-            unset($cart[$cartID]);
-            $request->session()->put('cart', $cart);
-            return back()
-                ->with('alert-msg', 'Removed all t-shirts related to "'. $estampa->name . '"')
-                ->with('alert-type', 'success');
-        }
         return back()
-            ->with('alert-msg', 'T-shirt "' . $estampa->name . '" had no quantity')
-            ->with('alert-type', 'warning');
+            ->with('alert-msg', 'Removed the t-shirt from the cart')
+            ->with('alert-type', 'success');
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -137,61 +103,56 @@ class CarrinhoController extends Controller
             $userType = $request->user()->user_type ?? 'C';
             if ($userType != 'C') {
                 $alertType = 'warning';
-                $htmlMessage = "O utilizador não é cliente, logo não pode confirmar a compra do carrinho";
+                $htmlMessage = "The user is not a client, therefore he cannot do the operation!";
             } 
             else{
                 $cart = session('cart', []);
-                $precoTotal = 0;
+                $totalPrice = 0;
                 $total = count($cart);
                 if ($total < 1) {
                     $alertType = 'warning';
-                    $htmlMessage = "Não é possível confirmar a compra porque não há t-shirts no carrinho";
+                    $htmlMessage = "No T-shirts in the cart";
                 } 
                 else {
                     $cliente = $request->user()->cliente;
                     
                     foreach ($cart as $cartItem){
-                        $precoTotal += $cartItem['total']; 
+                        $totalPrice += $cartItem['total']; 
                     }
 
-                    $order = DB::transaction(function () use ($cliente, $cart, $precoTotal){
+                    $order = DB::transaction(function () use ($cliente, $cart, $totalPrice){
                         
                         $newOrder = new Encomenda();
                         
                         $newOrder->customer_id = $cliente->id;
                         $newOrder->date = date("Y-m-d");
                         $newOrder->status = 'pending'; 
-                        $newOrder->total_price = $precoTotal;
+                        $newOrder->total_price = $totalPrice;
                         $newOrder->nif = $cliente->nif;
                         $newOrder->address = $cliente->address;
                         $newOrder->payment_type = $cliente->default_payment_type;
-                        $newOrder->payment_ref = $cliente->default_payment_ref ?? (Auth::user()->mail ?? '');
-                        
+                        $newOrder->payment_ref = $cliente->default_payment_ref;
                         $newOrder->save();
-                        //debug($newOrder);
 
                         foreach ($cart as $tshirt){
-                            $newOrderItem = new Tshirt();
+                            $newTshirt = new Tshirt();
                             
-                            $newOrderItem->order_id = $newOrder->id;
-                            $newOrderItem->tshirt_image_id = $tshirt["id"];
-                            $newOrderItem->qty = $tshirt["quantity"];
-                            $newOrderItem->size = $tshirt["size"];
+                            $newTshirt->order_id = $newOrder->id;
+                            $newTshirt->tshirt_image_id = $tshirt["id"];
+                            $newTshirt->qty = $tshirt["quantity"];
+                            $newTshirt->size = $tshirt["size"];
+                            $newTshirt->unit_price = $tshirt['price_per'];
+                            $newTshirt->sub_total = $tshirt['total'];
+                            $newTshirt->color_code = $tshirt['color'];  
 
-                            
-                            $newOrderItem->unit_price = $tshirt['price_per'];
-                            $newOrderItem->sub_total = $tshirt['total'];
-                            $newOrderItem->color_code = $tshirt['color'];
-                            //debug($newOrderItem);
-
-                            $newOrderItem->save();
+                            $newTshirt->save();
                         }
                     });
                     
                     if ($total == 1) {
-                        $htmlMessage = "Foi confirmada a compra de 1 item pelo cliente #{$cliente->id} <strong>\"{$request->user()->name}\"</strong>";
+                        $htmlMessage = "Operation successful #{$cliente->id} <strong>\"{$request->user()->name}\"</strong>";
                     } else {
-                        $htmlMessage = "Foi confirmada a compra de $total item pelo cliente #{$cliente->id} <strong>\"{$request->user()->name}\"</strong>";
+                        $htmlMessage = "Operation successful $total by client #{$cliente->id} <strong>\"{$request->user()->name}\"</strong>";
                     }
                     $request->session()->forget('cart');
                     return redirect()->route('catalogo.index')
@@ -201,77 +162,14 @@ class CarrinhoController extends Controller
             }
             
         } catch (\Exception $error) {
-            $htmlMessage = "Não foi possível confirmar a compra, porque ocorreu um erro!";
+            $htmlMessage = "It was not possible, to confirm the operation!";
             $alertType = 'danger';
         }
         return redirect('login')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', $alertType);
     }
-
-
-    /*public function index(Request $request)
-    {
-        return view('carrinho.index')
-            ->with('pageTitle', 'Carrinho de compras')
-            ->with('carrinho', session('carrinho') ?? []);
-    }
-
-
-
-
-    public function store(Request $request)
-    {
-        $carrinho = $request->session()->get('carrinho', []);
-        $idEstampa = $request->input('idEstampa');
-        $imagem_url = $request->input('imagem_url');
-        $cor_codigo = $request->input('cor_codigo');
-        $tamanho = $request->input('tamanho');
-        $quantity = $request->input('quantity');
-
-        if (($request->session()->get('quantity_desconto')) < $quantity) {
-            $preco_un_catalogo = $request->session()->get('preco_un_catalogo_desconto');
-            $subtotal = $preco_un_catalogo * $quantity;
-        }
-
-        if (($request->session()->get('quantity_desconto')) >= $quantity) {
-            $preco_un_catalogo = $request->session()->get('preco_un_catalogo');
-            $subtotal = $preco_un_catalogo * $quantity;
-        }
-
-        // $qtd = ($carrinho[$idEstampa]['qtd'] ?? 0) + 1;
-
-        $tamanhoCarrinho = $request->session()->get('tamanhoCarrinho', 0) + 1;
-
-        $carrinho[$tamanhoCarrinho] = [
-            'idEstampa' => $idEstampa,
-            'imagem_url' => $imagem_url,
-            'cor_codigo' => $cor_codigo,
-            'tamanho' => $tamanho,
-            'quantity' => $quantity,
-            'preco_un_catalogo' => $preco_un_catalogo,
-            'subtotal' => $subtotal
-        ];
-
-
-        $tamanhoCarrinho = count($carrinho);
-        $request->session()->put('tamanhoCarrinho', $tamanhoCarrinho);
-
-        $request->session()->put('carrinho', $carrinho);
-        //return dd($qtd);
-        return back()
-            ->with('alert-msg', 'Foi adicionado ao carrinho o idEstampa "' . $idEstampa . '" ao carrinho! quantity de inscrições = ' .  $tamanhoCarrinho)
-            ->with('alert-type', 'success');
-    }
-
-    public function destroy(Request $request)
-    {
-        $request->session()->forget('carrinho');
-        $request->session()->put('tamanhoCarrinho', 0);
-        return back()
-            ->with('alert-msg', 'Carrinho foi limpo!')
-            ->with('alert-type', 'danger');
-    }
+    /*
 
     public function store_cart_into_sale(Request $request)
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ClientePost;
@@ -19,15 +20,19 @@ class ClienteController extends Controller
 {
     public function index(Request $request): View
     {
-        $filterByNome = $request->nome ?? '';
+        $filterNome = $request->nome ?? '';
         $clienteQuery = Cliente::query();
-        if ($filterByNome !== ''){
-            $clienteIds = cliente::where('name', 'like', "%$filterByNome%")->pluck('id');
-            $clienteQuery->whereIntegerInRaw('id', $clienteIds);
+
+        if ($filterNome !== '') {
+            $userIds = User::where('name', 'like', "%$filterNome%")->pluck('id');
+            $clienteQuery->whereIn('id', $userIds);
         }
-        $clientes = $clienteQuery->paginate(5);
-        return view('clientes.index', compact('clientes', 'filterByNome'));
+
+        $clientes = $clienteQuery->with('user')->paginate(5);
+
+        return view('clientes.index', compact('clientes', 'filterNome'));
     }
+
 
     public function edit(Cliente $cliente): View
     {
@@ -61,8 +66,8 @@ class ClienteController extends Controller
             return $cliente;
         });
         $url = route('clientes.show', ['cliente' => $cliente]);
-        $htmlMessage = "Cliente <a href='$url'>#{$cliente->id}</a>
-                        <strong>\"{$cliente->user->name}\"</strong> foi alterado com sucesso!";
+        $htmlMessage = "Client <a href='$url'>#{$cliente->id}</a>
+                        <strong>\"{$cliente->user->name}\"</strong> was changed with success!";
         return redirect()->route('home')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
@@ -97,15 +102,15 @@ class ClienteController extends Controller
                 if ($cliente->user->photo_url) {
                     Storage::delete('public/fotos/' . $cliente->user->photo_url);
                 }
-                $htmlMessage = "cliente #{$cliente->id}
-                        <strong>\"{$cliente->user->name}\"</strong> foi apagado com sucesso!";
+                $htmlMessage = "client #{$cliente->id}
+                        <strong>\"{$cliente->user->name}\"</strong> was deleted with success!";
                 return redirect()->route('clientes.index')
                     ->with('alert-msg', $htmlMessage)
                     ->with('alert-type', 'success');
         } catch (\Exception $error) {
             $url = route('clientes.show', ['cliente' => $cliente]);
-            $htmlMessage = "Não foi possível apagar o cliente <a href='$url'>#{$cliente->id}</a>
-                        <strong>\"{$cliente->user->name}\"</strong> porque ocorreu um erro!";
+            $htmlMessage = "Could not remove client <a href='$url'>#{$cliente->id}</a>
+                        <strong>\"{$cliente->user->name}\"</strong> there was an error!";
             $alertType = 'danger';
         }
         return back()

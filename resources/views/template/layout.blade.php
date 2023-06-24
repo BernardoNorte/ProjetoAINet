@@ -32,9 +32,6 @@
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{{ route('catalogo.index') }}">All Products</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                             </ul>
                         </li>
                         @if ((Auth::user()->user_type ?? '') == 'C')
@@ -51,6 +48,13 @@
                         @endif
                         @if ((Auth::user()->user_type ?? '') == 'A')
                             <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : ''}}" href="{{ route('users.index') }}">Employees</a></li>
+                        @endif
+                        @if ((Auth::user()->user_type ?? '') == 'A')
+                            <a class="nav-link {{ Route::currentRouteName() == 'encomendas.statistics' ? 'active' : '' }}"
+                                href="{{ route('encomendas.statistics') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-text"></i></div>
+                                Statistics
+                            </a>
                         @endif
                     </ul>
         @guest

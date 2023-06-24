@@ -10,7 +10,7 @@ class EstatisticasController extends Controller
 {
     public function index()
     {
-        $encomendasbymonthyear = DB::select('select concat(year(data)," ",MONTHNAME(data))  as yearmonth , SUM(preco_total) as total from encomendas group by yearmonth');
+        $encomendasbymonthyear = DB::select('select concat(year(date)," ",MONTHNAME(date))  as yearmonth , SUM(total_price) as total from encomendas group by yearmonth');
 
         $counters = DB::select("SELECT
 (select count(*) from clientes) as clientes,
@@ -19,9 +19,9 @@ class EstatisticasController extends Controller
          (Select count(*)  from cores) as cores
        ");
 
-       $coresVendidas = DB::select('Select count(cor_codigo) as value,concat("#",cor_codigo) as color from tshirts group by cor_codigo');
+       $coresVendidas = DB::select('Select count(color_code) as value,concat("#",color_code) as color from tshirts group by color_code');
 
-       $tipoPagamento = DB::select('select count(tipo_pagamento) as cont,tipo_pagamento from encomendas group by tipo_pagamento');
+       $tipoPagamento = DB::select('select count(payment_ref) as cont,payment_ref from encomendas group by payment_ref');
 
 
         return view('estatisticas.index')->with('encomendasbymonthyear', $encomendasbymonthyear)

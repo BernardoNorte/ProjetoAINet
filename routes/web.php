@@ -5,11 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EncomendaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ClienteController;
-
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\TshirtController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarrinhoController;
+use App\Http\Controllers\EstatisticasController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 
 Auth::routes();
@@ -23,8 +24,6 @@ Route::post('encomendas', [EncomendaController::class, 'store'])->name('encomend
 
 Route::get('encomendas/{encomenda}/edit', [EncomendaController::class, 'edit'])->name('encomendas.edit');
 Route::put('encomendas/{encomenda}', [EncomendaController::class, 'update'])->name('encomendas.update');
-
-Route::delete('encomendas/{encomenda}', [EncomendaController::class, 'destroy'])->name('encomendas.destroy');
 
 Route::get('encomendas/{encomenda}/show', [EncomendaController::class, 'show'])->name('encomendas.show');
 //Route::resource('encomendas', EncomendaController::class);
@@ -69,10 +68,15 @@ Route::middleware('usar-carrinho')->group(function () {
     Route::delete('cart', [CarrinhoController::class, 'destroy'])->name('cart.destroy');
     Route::put('cart/{estampa}', [CarrinhoController::class, 'updateCart'])->name('cart.update');
     Route::post('cart/{estampa}', [CarrinhoController::class, 'addToCart'])->name('cart.add');
-    Route::delete('cart/{estampa}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
+    Route::delete('cart/{estampa}/{size}/{color}', [CarrinhoController::class, 'destroyCartTshirt'])->name('cart.remove');
 });
 
 Route::get('encomendas/minhas', [EncomendaController::class, 'minhasEncomendas'])->name('encomendas.minhas');
+
+Route::get('/encomendas/{encomenda}/pdf', [PdfController::class, 'index'])->name('pdf.index');
+
+Route::get('encomendas/statistics', [EncomendaController::class, 'statistics'])->name('encomendas.statistics');
+
 
 
 
