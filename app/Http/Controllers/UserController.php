@@ -103,10 +103,22 @@ class UserController extends Controller
             ->with('alert-type', 'success');
     }
 
+    public function destroy_foto(User $user): RedirectResponse
+    {
+        if ($user->photo_url){
+            Storage::delete('public/photos/' . $user->photo_url);
+            $user->photo_url = null;
+            $user->save();
+        }
+
+        return redirect()->route('users.edit', ['user' => $user])
+            ->with('alert-msg', 'user Photo "' . $user->name . '"was removed!')
+            ->with('alert-type', ' Success');
+    }
+
     public function destroy(User $user): RedirectResponse
     {
         try {
-                destroy_foto($user);
                 $user->delete();
                 $htmlMessage = "User #{$user->id}
                         <strong>\"{$user->name}\"</strong> was removed with success!";
@@ -124,18 +136,7 @@ class UserController extends Controller
             ->with('alert-type', $alertType);
     }
 
-    public function destroy_foto(User $user): RedirectResponse
-    {
-        if ($user->photo_url){
-            Storage::delete('public/photos/' . $user->photo_url);
-            $user->photo_url = null;
-            $user->save();
-        }
 
-        return redirect()->route('users.edit', ['user' => $user])
-            ->with('alert-msg', 'user Photo "' . $user->name . '"was removed!')
-            ->with('alert-type', ' Success');
-    }
 
     public function __construct()
     {
