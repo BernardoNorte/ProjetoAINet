@@ -56,8 +56,10 @@
                     <label for="inputSize" class="form-label">Size</label>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="mb-3 form-floating">
+                <div class="form-group">
                     <input class="form-control" type="number" id="inputQuantity" name="quantity" min="1" max="99" value="1" required>
                     <label for="exampleFormControlSelect2">Quantity</label>
                 </div>
